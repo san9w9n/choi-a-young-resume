@@ -3,26 +3,19 @@
 작업치료사(감각통합치료) 최아영의 이력 · 치료 사례 · 후기 페이지입니다.
 빌드 도구 없이 `index.html` 한 파일로 동작하는 정적 사이트입니다.
 
-## 배포 방법
+## 배포
 
-저장소에 푸시한 뒤 아래 둘 중 **하나만** 설정하면 됩니다.
+주소: <https://san9w9n.github.io/choi-a-young-resume/>
 
-**A. GitHub Actions (이 저장소에 포함된 워크플로 사용)**
+`.github/workflows/pages.yml` 이 푸시될 때마다 자동으로 배포합니다.
+Pages 활성화도 워크플로의 `enablement: true` 가 처리하므로 Settings 를 건드릴 필요가 없습니다.
 
-푸시만 하면 `.github/workflows/pages.yml` 이 Pages 활성화(`enablement: true`)까지 알아서 처리합니다.
-다만 **비공개(private) 저장소는 유료 플랜에서만 Pages 를 쓸 수 있어** 활성화가 실패합니다.
-그 경우 저장소를 public 으로 바꾸거나 아래 B 를 쓰세요.
+**저장소는 public 이어야 합니다.** 무료 플랜에서 Pages 는 public 저장소만 지원하며,
+private 로 되돌리면 배포가 `Resource not accessible by integration` 오류로 실패합니다.
+private 를 유지하려면 GitHub Pro 이상이 필요합니다.
 
-실패하면 **Settings → Pages → Build and deployment → Source** 를 `GitHub Actions` 로
-직접 바꾼 뒤 **Actions** 탭에서 워크플로를 다시 실행하면 됩니다.
-
-**B. 브랜치에서 바로 배포**
-
-1. **Settings → Pages → Source** 를 `Deploy from a branch` 로 선택
-2. 브랜치는 배포할 브랜치, 폴더는 `/ (root)` 선택
-
-주소는 `https://<사용자명>.github.io/choi-a-young-resume/` 입니다.
-`<사용자명>.github.io` 로 쓰고 싶다면 저장소 이름을 그대로 `<사용자명>.github.io` 로 만들어 옮기면 됩니다.
+`san9w9n.github.io` 처럼 짧은 주소를 쓰려면 저장소 이름 자체를 `san9w9n.github.io` 로
+만들어 파일을 옮기면 됩니다.
 
 ## 로컬에서 확인
 
