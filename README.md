@@ -8,11 +8,19 @@
 주소: <https://san9w9n.github.io/choi-a-young-resume/>
 
 `.github/workflows/pages.yml` 이 푸시될 때마다 자동으로 배포합니다.
-Pages 활성화도 워크플로의 `enablement: true` 가 처리하므로 Settings 를 건드릴 필요가 없습니다.
 
-**저장소는 public 이어야 합니다.** 무료 플랜에서 Pages 는 public 저장소만 지원하며,
-private 로 되돌리면 배포가 `Resource not accessible by integration` 오류로 실패합니다.
+**최초 1회만 수동 설정이 필요합니다** — **Settings → Pages → Build and deployment →
+Source** 를 `GitHub Actions` 로 지정하세요. 워크플로에 `enablement: true` 가 있지만
+Pages 사이트를 **새로 만드는** API 는 저장소 admin 권한을 요구하는 반면
+워크플로의 `GITHUB_TOKEN` 은 admin 이 아니라서
+`Create Pages site failed. Resource not accessible by integration` 으로 거부됩니다.
+한 번 켜 두면 그다음부터는 `enablement` 가 기존 사이트를 찾아 그대로 진행합니다.
+
+**저장소는 public 이어야 합니다.** 무료 플랜에서 Pages 는 public 저장소만 지원합니다.
 private 를 유지하려면 GitHub Pro 이상이 필요합니다.
+
+그래도 실패한다면 **Settings → Actions → General → Workflow permissions** 가
+`Read and write permissions` 인지 확인하세요.
 
 `san9w9n.github.io` 처럼 짧은 주소를 쓰려면 저장소 이름 자체를 `san9w9n.github.io` 로
 만들어 파일을 옮기면 됩니다.
