@@ -9,9 +9,12 @@
 
 **A. GitHub Actions (이 저장소에 포함된 워크플로 사용)**
 
-1. 저장소 **Settings → Pages** 이동
-2. **Build and deployment → Source** 를 `GitHub Actions` 로 선택
-3. 푸시하면 `.github/workflows/pages.yml` 이 자동으로 배포합니다
+푸시만 하면 `.github/workflows/pages.yml` 이 Pages 활성화(`enablement: true`)까지 알아서 처리합니다.
+다만 **비공개(private) 저장소는 유료 플랜에서만 Pages 를 쓸 수 있어** 활성화가 실패합니다.
+그 경우 저장소를 public 으로 바꾸거나 아래 B 를 쓰세요.
+
+실패하면 **Settings → Pages → Build and deployment → Source** 를 `GitHub Actions` 로
+직접 바꾼 뒤 **Actions** 탭에서 워크플로를 다시 실행하면 됩니다.
 
 **B. 브랜치에서 바로 배포**
 
