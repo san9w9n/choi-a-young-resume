@@ -34,24 +34,39 @@ python3 -m http.server 8000
 
 `index.html` 을 브라우저로 바로 열어도 됩니다.
 
+## 파일 구조
+
+`index.html` 한 파일이며, 위쪽 `<style>` 블록에 모든 스타일이 있습니다.
+색·여백은 맨 위 `:root` 의 변수로 모아 두었으니 톤을 바꾸려면 그 값만 고치면 됩니다.
+
+```css
+--green:#33544a;   /* 강조색 (치료 접근 섹션, 문의 버튼) */
+--bg:#f7f5f0;      /* 배경 */
+--gutter:...;      /* 좌우 여백 */
+--maxw:1180px;     /* 본문 최대 폭 */
+```
+
+반응형 분기는 세 곳입니다 — 헤더 900px, 히어로 860px, 표 형태 목록 680~780px.
+
 ## 내용 수정 안내
 
 - **연락처** — `index.html` 맨 아래 `<footer id="contact">` 안의 이메일/전화번호 두 곳(링크 `href` 와 화면 표시 텍스트)을 함께 수정
-- **사진 · 영상** — `class="slot"` 인 회색 점선 박스가 자리표시자입니다. 파일을 넣으려면 박스 안에 태그를 넣으면 자동으로 꽉 채워집니다.
+- **사진 · 영상** — `class="slot"` 인 회색 점선 박스가 자리표시자입니다. 크기는 클래스가 정하므로 박스 안에 태그만 넣으면 자동으로 꽉 채워집니다.
   ```html
-  <!-- 사진 -->
-  <div class="slot" style="width:100%;height:clamp(240px,42vw,330px)">
+  <!-- 프로필 사진 -->
+  <div class="slot portrait">
     <img src="images/portrait.jpg" alt="프로필 사진">
   </div>
 
-  <!-- 유튜브 영상 -->
-  <div class="slot" style="flex:0 0 auto;width:100%;height:190px">
+  <!-- 유튜브 영상 (치료 영상 섹션) -->
+  <div class="slot">
     <iframe src="https://www.youtube.com/embed/영상ID" title="스윙 활동" allowfullscreen></iframe>
   </div>
 
   <!-- 직접 올린 영상 파일 -->
-  <div class="slot" style="flex:0 0 auto;width:100%;height:190px">
+  <div class="slot">
     <video src="videos/swing.mp4" controls playsinline></video>
   </div>
   ```
-- **치료 사례 추가** — `사례 01` 의 `<article>` 을 복사해 내용을 바꾸고, 그 아래 `사례 02 · 03` 점선 박스를 지우면 됩니다.
+- **치료 사례 추가** — `사례 01` 의 `<article class="case">` 를 복사해 내용을 바꾸고, 그 아래 `<ul class="pending">` 의 점선 박스를 지우면 됩니다.
+- **인쇄 / PDF** — 브라우저 인쇄를 하면 내비게이션·사진칸·준비 중 항목이 빠지고 흑백으로 정리된 이력서 형태로 출력됩니다.
