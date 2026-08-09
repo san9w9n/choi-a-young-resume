@@ -6,9 +6,7 @@ export function SiteHeader() {
       <div className="wrap head-inner">
         <p className="brand">
           <span className="brand-name">{site.name}</span>
-          <span className="brand-role">
-            {site.role} · {site.field}
-          </span>
+          <span className="brand-role">{site.role}</span>
         </p>
         <a className="cta" href="#contact">
           문의

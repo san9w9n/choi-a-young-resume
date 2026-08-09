@@ -414,7 +414,6 @@ h1,h2,h3{text-wrap:balance}
 }
 @media (max-width:680px){
   :root{--pad-y:52px}
-  .brand-role{display:none}
   .cta{padding:0 16px}
   .h2{max-width:none}
   .hero{border-radius:20px;margin-top:10px;padding-block:34px}
