@@ -1,43 +1,75 @@
 # 최아영 · 작업치료사 포트폴리오
 
 작업치료사(감각통합치료) 최아영의 이력 · 치료 사례 · 후기 페이지입니다.
-빌드 도구 없이 `index.html` 한 파일로 동작하는 정적 사이트입니다.
+Next.js(App Router) 로 만든 한 페이지짜리 사이트이며, Vercel 에 배포합니다.
 
-## 배포
-
-주소: <https://san9w9n.github.io/choi-a-young-resume/>
-
-`.github/workflows/pages.yml` 이 푸시될 때마다 자동으로 배포합니다.
-
-**최초 1회만 수동 설정이 필요합니다** — **Settings → Pages → Build and deployment →
-Source** 를 `GitHub Actions` 로 지정하세요. 워크플로에 `enablement: true` 가 있지만
-Pages 사이트를 **새로 만드는** API 는 저장소 admin 권한을 요구하는 반면
-워크플로의 `GITHUB_TOKEN` 은 admin 이 아니라서
-`Create Pages site failed. Resource not accessible by integration` 으로 거부됩니다.
-한 번 켜 두면 그다음부터는 `enablement` 가 기존 사이트를 찾아 그대로 진행합니다.
-
-**저장소는 public 이어야 합니다.** 무료 플랜에서 Pages 는 public 저장소만 지원합니다.
-private 를 유지하려면 GitHub Pro 이상이 필요합니다.
-
-그래도 실패한다면 **Settings → Actions → General → Workflow permissions** 가
-`Read and write permissions` 인지 확인하세요.
-
-`san9w9n.github.io` 처럼 짧은 주소를 쓰려면 저장소 이름 자체를 `san9w9n.github.io` 로
-만들어 파일을 옮기면 됩니다.
-
-## 로컬에서 확인
+## 개발
 
 ```bash
-python3 -m http.server 8000
-# http://localhost:8000
+npm install
+npm run dev     # http://localhost:3000
 ```
 
-`index.html` 을 브라우저로 바로 열어도 됩니다.
+Node 22.18 이상이 필요합니다. `npm run check:copy` 가 `content/resume.ts` 를
+컴파일 없이 바로 읽는데, 이 기능(TypeScript type stripping)이 22.18 부터 기본으로 켜집니다.
+
+| 명령                   | 하는 일                                       |
+| ---------------------- | --------------------------------------------- |
+| `npm run dev`          | 개발 서버                                     |
+| `npm run build`        | 프로덕션 빌드                                 |
+| `npm start`            | 빌드 결과 실행                                |
+| `npm run lint`         | ESLint                                        |
+| `npm run typecheck`    | 타입 검사                                     |
+| `npm run check:copy`   | 이력서 문안 길이 검사 (문장 45자·본문 1370자) |
+
+## 배포 — Vercel
+
+주소: <https://choi-a-young-resume.vercel.app>
+
+Vercel 프로젝트(`choi-a-young-resume`)와 이 GitHub 저장소가 이미 연결돼 있어,
+기본 브랜치에 푸시하면 프로덕션으로, 다른 브랜치에 푸시하면 미리보기로 자동 배포됩니다.
+
+로컬에서 바로 올리려면:
+
+```bash
+npx vercel          # 미리보기 배포
+npx vercel --prod   # 프로덕션 배포
+```
+
+프레임워크 감지·빌드 명령·출력 경로는 Vercel 이 Next.js 를 알아보고 알아서 잡으므로
+`vercel.json` 은 두지 않았습니다.
+
+`.vercel/` 과 `.env.local` 은 `vercel link` 가 만든 로컬 전용 파일이라 커밋하지 않습니다.
+
+### 도메인 주소를 메타데이터에 반영하기
+
+Open Graph 의 절대 주소를 만들 때 쓰는 값입니다. Vercel 에 배포하면
+`VERCEL_PROJECT_PRODUCTION_URL` 이 자동으로 들어오므로 보통은 아무것도 안 해도 됩니다.
+직접 산 도메인을 쓸 때만 Vercel 프로젝트 설정에서 환경변수를 넣으세요.
+
+```
+NEXT_PUBLIC_SITE_URL=https://example.com
+```
 
 ## 파일 구조
 
-`index.html` 한 파일이며, 위쪽 `<style>` 블록에 모든 스타일이 있습니다.
-색·여백은 맨 위 `:root` 의 변수로 모아 두었으니 톤을 바꾸려면 그 값만 고치면 됩니다.
+```
+app/
+  layout.tsx        메타데이터 · 폰트 · <html lang="ko">
+  page.tsx          섹션 조립
+  globals.css       모든 스타일 (토큰 → 섹션 → 반응형 → 인쇄 순)
+  components/       섹션별 컴포넌트 (배치만 담당)
+content/
+  resume.ts         페이지에 나오는 모든 문장
+scripts/
+  check-copy.mjs    문안 길이 검사
+public/             파비콘
+```
+
+**내용을 고칠 때는 `content/resume.ts` 한 파일만 열면 됩니다.**
+컴포넌트에는 문장이 하드코딩되어 있지 않습니다.
+
+## 디자인 규칙
 
 색은 **무채색 바탕 + 포인트 한 가지** 구성입니다. 넓은 면은 전부 회색 계열이고,
 테라코타(`--accent`)는 라벨과 작은 글자에만 씁니다 — 포인트를 넓은 면에 쓰면
@@ -49,38 +81,86 @@ python3 -m http.server 8000
 --band:#232322;      /* 짙은 띠(치료 접근) · 문의 버튼 */
 --tint:#f4f3f1;      /* 옅은 채움 — 배지 · 인용 상자 · 사진칸 */
 --accent:#b0522c;    /* 포인트 — 라벨, 작은 글자에만 */
---gutter:...;        /* 좌우 여백 */
+--measure:42ch;      /* 한 줄 글자 수 상한 */
+--tap:44px;          /* 손가락으로 누르는 대상의 최소 크기 */
 --maxw:1240px;       /* 본문 최대 폭 */
 ```
 
 본문 색은 `--ink`(진함) → `--ink-mid` → `--ink-soft` → `--ink-muted`(옅음) 순이며,
 가장 옅은 값도 배경 대비 4.5:1 이상이 되도록 잡았습니다.
 
-반응형 분기는 세 곳입니다 — 헤더 900px, 히어로 860px, 표 형태 목록 680~780px.
+### 한글 배치 규칙
+
+- `word-break:keep-all` — 한글이 어절 중간에서 끊기지 않게 합니다. 좁은 화면에서 특히 크게 갈립니다.
+- 제목은 `<br>` 로 줄을 고정하지 않고 `text-wrap:balance` + `max-width`(ch) 로 브라우저가 고르게 끊습니다. 화면 폭이 바뀌어도 어색한 줄바꿈이 생기지 않습니다.
+- 문단은 `--measure`(42ch) / `--measure-wide`(52ch) 로 한 줄 길이를 제한합니다.
+- 430px 이하에서는 본문 글자를 15px 이상으로 올립니다.
+
+반응형 분기는 헤더 900px, 히어로 860px, 표 형태 목록 680~780px, 본문 크기 430px 입니다.
+
+### 문안 길이
+
+이력서는 읽는 문서가 아니라 훑는 문서라, `npm run check:copy` 가 네 가지를 잠급니다.
+
+| 대상                              | 상한                  |
+| --------------------------------- | --------------------- |
+| 한 문장                           | 45자                  |
+| 한 문단                           | 1문장 (변화·후기는 2) |
+| 직함·과목 나열 (`role`, `detail`) | 한 줄 60자            |
+| 본문 전체                         | 1370자                |
+
+나열을 문장과 따로 두는 이유는, 45자 규칙을 목록에 들이대면 문장을 다듬는 게 아니라
+이수한 과목을 지우게 되기 때문입니다. 분량은 줄이되 사실은 남겨야 합니다.
+
+**총량 상한이 핵심입니다.** 문장을 하나하나 짧게 써도 개수가 늘면 결국 읽을 양이
+늘어납니다. 문장을 더하고 싶으면 다른 문장을 지우세요.
+2026-08-09 에 1810자에서 1365자로 줄이고 상한을 걸었습니다.
+
+한때 1294자까지 내려갔지만 되돌렸습니다. 그 차이는 "시각 추적", "허리·등",
+"관절 압박", "자신감" 같은 임상 사실을 지워서 만든 것이었기 때문입니다.
+**분량은 수식어를 지워 줄이는 것이지 사실을 지워 줄이는 게 아닙니다.**
+상한에 걸리면 사실을 지우기 전에 중복 문장부터 찾으세요.
+
+### 등장 애니메이션
+
+스크롤에 맞춰 살짝 떠오르며 나타납니다. 자바스크립트는 쓰지 않고
+CSS `animation-timeline` 만으로 처리합니다.
+
+숨김 상태(`opacity:0`)는 평소 스타일이 아니라 **키프레임 안에만** 둡니다.
+그래서 애니메이션이 안 걸리는 상황 — 미지원 브라우저, 움직임 줄이기 설정, 인쇄 —
+에서는 요소가 처음부터 그냥 보입니다. 내용이 안 보이는 사고가 구조적으로 날 수 없습니다.
+
+`animation-timeline` 과 `animation-range` 는 각각 따로 지원될 수 있어
+`@supports` 에서 **둘 다** 확인합니다. 하나만 되는 브라우저는 애니메이션 없이 갑니다.
+
+## 폰트
+
+- 제목(Hahmlet) — `next/font/google` 로 빌드 시점에 받아 자체 호스팅합니다. 굵기는 실제로 쓰는 500·600 만 받습니다.
+- 본문(SUIT · Pretendard) — 구글 폰트에 없어 `app/layout.tsx` 의 jsDelivr 스타일시트로 받습니다. 둘 다 한글 동적 서브셋이라 실제 쓰인 글자만 내려받습니다.
 
 ## 내용 수정 안내
 
-- **연락처** — `index.html` 맨 아래 `<footer id="contact">` 안의 이메일/전화번호 두 곳(링크 `href` 와 화면 표시 텍스트)을 함께 수정
-- **프로필 사진** — 히어로의 회색 점선 박스(`class="slot portrait"`)가 자리표시자입니다.
-  크기는 클래스가 정하므로 박스 안에 태그만 넣으면 자동으로 꽉 채워집니다.
-  ```html
-  <div class="slot portrait">
-    <img src="images/portrait.jpg" alt="프로필 사진">
+- **연락처** — `content/resume.ts` 의 `contact.links`
+- **프로필 사진** — `app/components/Hero.tsx` 의 `<div className="slot portrait">` 안에 `<img>` 를 넣으면 칸을 꽉 채웁니다.
+  ```tsx
+  <div className="slot portrait">
+    <Image src="/portrait.jpg" alt="프로필 사진" width={800} height={1000} />
   </div>
   ```
-  `<video>` 나 `<iframe>` 을 넣어도 같은 방식으로 채워집니다.
-- **치료 사례 추가** — `사례 01` 의 `<article class="case">` 를 복사해 내용을 바꾸고, 그 아래 `<ul class="pending">` 의 점선 박스를 지우면 됩니다.
+- **치료 사례 추가** — `content/resume.ts` 의 `cases.records` 에 항목을 넣고, 다 채웠으면 `cases.pending` 을 비우면 됩니다.
 - **인쇄 / PDF** — 브라우저 인쇄를 하면 내비게이션·사진칸·준비 중 항목이 빠지고 흑백으로 정리된 이력서 형태로 출력됩니다.
 
 ## 파비콘
 
-제공받은 로고(네이비 바탕에 흰 인물 심벌 + 세이지색 원 3개)를 세 가지 크기로 구워 뒀습니다.
+제공받은 로고(네이비 바탕에 흰 인물 심벌 + 세이지색 원 3개)를 세 가지 크기로 구워
+`public/` 에 뒀습니다.
 
-| 파일 | 크기 | 용도 |
-|---|---|---|
-| `favicon-32.png` | 32×32 | 브라우저 탭 |
-| `favicon-96.png` | 96×96 | 고해상도 탭 · 북마크 |
-| `apple-touch-icon.png` | 180×180 | iOS 홈 화면 (모서리는 iOS 가 깎으므로 각진 정사각형) |
+| 파일                   | 크기    | 용도                                                  |
+| ---------------------- | ------- | ----------------------------------------------------- |
+| `favicon-32.png`       | 32×32   | 브라우저 탭                                           |
+| `favicon-96.png`       | 96×96   | 고해상도 탭 · 북마크                                  |
+| `apple-touch-icon.png` | 180×180 | iOS 홈 화면 (모서리는 iOS 가 깎으므로 각진 정사각형)  |
 
-로고를 바꾸려면 같은 이름으로 정사각형 이미지를 덮어쓰면 됩니다.
-`<head>` 의 `<link rel="icon">` 경로는 그대로 두면 됩니다.
+로고를 바꾸려면 `public/` 에 같은 이름으로 정사각형 이미지를 덮어쓰면 됩니다.
+경로 선언은 `app/layout.tsx` 의 `metadata.icons` 에 있으니 그대로 두면 됩니다
+(Next.js 가 `<link rel="icon">` 을 대신 넣어 줍니다).

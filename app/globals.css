@@ -1,0 +1,468 @@
+/* ── 토큰 ─────────────────────────────────────────────── */
+:root{
+  --bg:#fafaf9;
+  --surface:#ffffff;
+  --ink:#1c1b19;
+  --ink-strong:#14130f;
+  --ink-mid:#3a3835;
+  --ink-soft:#55524d;
+  --ink-muted:#67645e;
+  --line:rgba(28,27,25,.15);
+  --line-soft:rgba(28,27,25,.08);
+  /* 짙은 띠 · 기본 버튼 */
+  --band:#232322;
+  --band-deep:#121211;
+  --band-ink:#c9c7c2;
+  /* 옅은 채움 (배지 · 인용 상자 · 사진칸) */
+  --tint:#f4f3f1;
+  /* 포인트색 — 라벨과 작은 글자에만 */
+  --accent:#b0522c;
+  --accent-soft:#dc9d78;
+  --dark:#1a1917;
+
+  /* 본문은 SUIT(CDN), 제목은 Hahmlet(next/font 로 자체 호스팅) */
+  --font-sans:'SUIT Variable',SUIT,Pretendard,system-ui,-apple-system,sans-serif;
+  --font-serif:var(--font-hahmlet),Hahmlet,serif;
+
+  --shadow-sm:0 10px 30px rgba(28,27,25,.06);
+  --shadow-md:0 22px 55px rgba(28,27,25,.09);
+  --radius-sm:12px;
+  --radius-md:20px;
+  --radius-lg:30px;
+
+  --gutter:clamp(18px,5vw,60px);
+  --pad-y:clamp(56px,8vw,96px);
+  --maxw:1240px;
+
+  /* 한 줄에 들어갈 글자 수 상한 — 한글은 40~45자가 읽기 편합니다. */
+  --measure:42ch;
+  --measure-wide:52ch;
+  /* 손가락으로 누르는 대상의 최소 크기 */
+  --tap:44px;
+  /* 고정 헤더 높이 — 앵커로 이동했을 때 섹션이 헤더에 가리지 않게 맞춥니다.
+     좁은 화면에서는 섹션 링크가 둘째 줄로 내려가 헤더가 그만큼 높아집니다. */
+  --head-h:120px;
+}
+@media (min-width:900px){:root{--head-h:70px}}
+
+/* ── 리셋 ─────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:16px;
+  line-height:1.7;
+  letter-spacing:-.014em;
+  -webkit-font-smoothing:antialiased;
+  /* 한글은 어절 단위로 끊어야 읽힙니다. 좁은 화면에서 특히 크게 갈립니다. */
+  word-break:keep-all;
+  /* 이메일·URL 처럼 어절로 못 끊는 긴 토큰은 그때만 강제로 끊습니다. */
+  overflow-wrap:break-word;
+}
+h1,h2,h3,p,dd,figure{margin:0}
+ul{margin:0;padding:0;list-style:none}
+img{max-width:100%;display:block}
+a{color:inherit}
+p,li,dd{text-wrap:pretty}
+h1,h2,h3{text-wrap:balance}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:50;
+  background:var(--band);color:#fff;padding:12px 18px;border-radius:0 0 4px 0;
+  font-size:14px;font-weight:600;text-decoration:none;
+}
+.skip:focus{left:0}
+
+/* ── 레이아웃 ─────────────────────────────────────────── */
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+.section{padding-block:var(--pad-y)}
+.section,.site-foot{scroll-margin-top:var(--head-h)}
+.band-dark{background:var(--band);color:var(--band-ink)}
+.band-pale{background:var(--tint);border-block:1px solid var(--line-soft)}
+
+/* ── 타이포 ───────────────────────────────────────────── */
+.serif{font-family:var(--font-serif);font-weight:600;letter-spacing:-.02em}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--accent);margin-bottom:12px}
+.band-dark .eyebrow{color:var(--accent-soft)}
+.h2{font-size:clamp(24px,3.2vw,36px);line-height:1.32;color:var(--ink-strong);max-width:20ch}
+.band-dark .h2{color:#fff;margin-bottom:clamp(28px,4vw,38px)}
+
+.sec-head{
+  display:flex;flex-wrap:wrap;gap:8px 24px;
+  align-items:baseline;justify-content:space-between;
+  margin-bottom:clamp(28px,4vw,42px);
+}
+.sec-note{font-size:14px;color:var(--ink-muted);max-width:34ch}
+
+/* ── 헤더 ─────────────────────────────────────────────── */
+.site-head{
+  position:sticky;top:0;z-index:30;
+  padding-block:8px;
+  background:rgba(250,250,249,.88);
+  border-bottom:1px solid var(--line-soft);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transition:border-color .2s,background .2s;
+}
+/* backdrop-filter 미지원 브라우저에서는 반투명 배경이 뒤 내용과 겹치므로 불투명 처리 */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .site-head{background:var(--bg)}
+}
+.head-inner{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;min-height:var(--tap)}
+.brand{flex:1 1 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-width:0}
+.brand-name{font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--ink-strong)}
+.brand-role{font-size:13.5px;color:var(--ink-muted)}
+
+/* 섹션 링크는 좁은 화면에서 줄바꿈 대신 가로 스크롤 */
+.nav{
+  order:3;width:100%;
+  display:flex;align-items:center;gap:2px;font-size:14.5px;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  margin-inline:calc(var(--gutter) * -1);
+  padding:2px var(--gutter);
+  /* 오른쪽 페이드로 더 스크롤할 수 있음을 표시 */
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);
+  mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);
+}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  display:inline-flex;align-items:center;min-height:var(--tap);
+  color:var(--ink-soft);text-decoration:none;white-space:nowrap;
+  padding:0 13px;border-radius:999px;transition:background .15s,color .15s;
+}
+.nav a:hover{color:var(--band-deep);background:rgba(28,27,25,.06)}
+
+/* 문의 버튼은 스크롤 영역 밖에 두어 항상 보이게 */
+.cta{
+  order:2;flex:0 0 auto;
+  display:inline-flex;align-items:center;min-height:var(--tap);
+  background:var(--band);color:#fff;font-weight:600;font-size:14.5px;
+  text-decoration:none;white-space:nowrap;
+  padding:0 20px;border-radius:999px;
+  box-shadow:0 8px 20px rgba(28,27,25,.16);
+  transition:background .15s,transform .15s,box-shadow .15s;
+}
+.cta:hover{background:var(--band-deep);color:#fff;transform:translateY(-1px);box-shadow:0 10px 24px rgba(28,27,25,.22)}
+
+/* 브랜드 + 4개 링크 + 버튼이 한 줄에 다 들어가는 폭부터 데스크톱 배치 */
+@media (min-width:900px){
+  .head-inner{gap:10px 28px}
+  .nav{
+    order:2;width:auto;margin-inline:0;padding:0;
+    -webkit-mask-image:none;mask-image:none;
+  }
+  .cta{order:3;margin-left:2px}
+}
+
+/* ── 히어로 ───────────────────────────────────────────── */
+.hero{
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(28px,5vw,62px);
+  margin-top:clamp(14px,2.5vw,28px);
+  padding-block:clamp(40px,6vw,76px);
+  background:var(--surface);
+  border:1px solid rgba(28,27,25,.09);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);
+  overflow:hidden;
+}
+/* .wrap 의 max-width 만으로는 1240px 미만에서 카드가 화면에 딱 붙으므로 바깥 여백을 준다 */
+.hero-outer{padding-inline:var(--gutter);margin-inline:auto;max-width:var(--maxw)}
+.hero-outer>.hero{margin-inline:0;padding-inline:clamp(24px,4vw,64px);max-width:none}
+@media (min-width:860px){
+  .hero{grid-template-columns:minmax(0,1.45fr) minmax(280px,.65fr);align-items:center}
+}
+.hero-copy{min-width:0}
+.hero h1{
+  font-size:clamp(29px,4.8vw,54px);line-height:1.28;
+  color:var(--ink-strong);margin-bottom:clamp(18px,2.5vw,28px);
+  /* <br> 로 줄을 고정하지 않고 브라우저가 폭에 맞춰 고르게 끊도록 둡니다. */
+  max-width:16ch;
+}
+.hero p{max-width:var(--measure)}
+.hero .lead{font-size:clamp(16.5px,1.65vw,19px);color:var(--ink-mid);margin-bottom:12px}
+.hero .sub{font-size:15.5px;color:var(--ink-soft)}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:16px;color:var(--accent);
+  font-size:12.5px;font-weight:800;letter-spacing:.13em;
+}
+/* flex 자식이라 기본값(flex-shrink:1)이면 좁은 화면에서 선이 눌려 길이가 들쭉날쭉해진다 */
+.hero-kicker::before{content:"";flex:0 0 auto;width:28px;height:1px;background:var(--accent)}
+/* 320px 급 화면에서는 선+텍스트가 한 줄에 못 들어가 두 줄로 접히므로 선을 뺀다 */
+@media (max-width:359px){
+  .hero-kicker{letter-spacing:.08em}
+  .hero-kicker::before{display:none}
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.hero-action{
+  display:inline-flex;align-items:center;justify-content:center;min-height:var(--tap);
+  padding:10px 20px;border-radius:999px;text-decoration:none;font-size:15px;font-weight:700;
+  transition:transform .15s,background .15s,border-color .15s;
+}
+.hero-action:hover{transform:translateY(-2px)}
+.hero-action.primary{background:var(--band);color:#fff;box-shadow:0 10px 25px rgba(28,27,25,.16)}
+.hero-action.secondary{background:rgba(255,255,255,.7);border:1px solid var(--line);color:var(--band-deep)}
+.hero-media{position:relative;z-index:1;min-width:0}
+.hero-caption{
+  display:flex;align-items:center;gap:8px;margin-top:12px;
+  color:var(--ink-muted);font-size:13px;
+}
+.hero-caption::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+
+.portrait{
+  width:100%;height:clamp(220px,44vw,340px);
+  border-radius:calc(var(--radius-md) + 2px);
+  background:var(--tint);
+  border:1px solid rgba(28,27,25,.14);
+}
+@media (min-width:860px){.portrait{height:auto;aspect-ratio:4/5}}
+
+/* ── 요약 지표 ────────────────────────────────────────── */
+.facts{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:0;background:var(--surface);border:1px solid var(--line-soft);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden;
+}
+.facts-wrap{padding-bottom:clamp(30px,5vw,56px)}
+.fact{position:relative;padding:20px clamp(16px,2.4vw,28px);min-width:0}
+.fact+.fact{border-left:1px solid var(--line-soft)}
+.fact dt{font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--accent);margin-bottom:5px}
+.fact dd{font-size:15.5px;font-weight:650;line-height:1.5;color:var(--ink-strong)}
+
+/* ── 치료 접근 ────────────────────────────────────────── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
+.card{
+  padding:clamp(20px,2.5vw,28px);border:1px solid rgba(255,255,255,.13);
+  border-radius:var(--radius-sm);background:rgba(255,255,255,.055);
+  transition:background .2s,transform .2s,border-color .2s;
+}
+.card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.26);transform:translateY(-3px)}
+.card .step{font-size:12.5px;letter-spacing:.1em;color:var(--accent-soft);margin-bottom:7px}
+.card h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
+.card p{font-size:15px;color:var(--band-ink)}
+
+/* ── 치료 사례 ────────────────────────────────────────── */
+.case{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden}
+.case+.case{margin-top:16px}
+.case-head{
+  padding:clamp(20px,3.4vw,32px);
+  border-bottom:1px solid var(--line-soft);
+  display:flex;flex-wrap:wrap;gap:14px 24px;
+  align-items:flex-end;justify-content:space-between;
+}
+.case-label{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--accent);margin-bottom:9px}
+.case-title{font-size:clamp(19px,2.5vw,26px);line-height:1.4;color:var(--ink-strong);margin-bottom:7px;max-width:22ch}
+.case-meta{font-size:14.5px;color:var(--ink-muted)}
+.badge{
+  font-size:14px;font-weight:700;color:var(--band);background:var(--tint);
+  border:1px solid rgba(28,27,25,.09);border-radius:999px;padding:8px 15px;white-space:nowrap;
+}
+.case-body{padding:clamp(20px,3.4vw,32px)}
+
+.row{display:grid;gap:8px 28px;padding-block:24px;border-top:1px solid var(--line-soft)}
+.row:first-child{padding-top:0;border-top:0}
+.row:last-child{padding-bottom:0}
+@media (min-width:680px){.row{grid-template-columns:96px minmax(0,1fr)}}
+.row .k{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--accent);line-height:1.9}
+.row p{font-size:15.5px;color:var(--ink-mid);max-width:var(--measure-wide)}
+.row .stack{display:flex;flex-direction:column;gap:10px;min-width:0}
+
+.changes{display:flex;flex-direction:column;gap:11px}
+.change{display:grid;gap:0 14px}
+@media (min-width:420px){.change{grid-template-columns:66px minmax(0,1fr)}}
+.change .when{font-size:14px;color:var(--ink-muted);line-height:1.9}
+.change .what{font-size:15.5px;color:var(--ink-mid);max-width:var(--measure-wide)}
+.note{
+  margin-top:14px;padding:17px 19px;background:var(--tint);border-radius:var(--radius-sm);
+  border-left:3px solid var(--accent);
+  font-size:15px;color:var(--ink-soft);max-width:var(--measure-wide);
+}
+
+.pending{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;margin-top:16px}
+.pending li{border:1px dashed rgba(28,27,25,.22);border-radius:var(--radius-sm);padding:20px 22px;background:rgba(255,255,255,.3)}
+.pending .n{font-size:12.5px;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:6px}
+.pending p{font-size:15px;color:var(--ink-muted)}
+
+/* ── 후기 ─────────────────────────────────────────────── */
+.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.quote{
+  position:relative;background:var(--surface);border:1px solid rgba(28,27,25,.08);
+  border-radius:var(--radius-md);padding:clamp(22px,3.2vw,32px);
+  display:flex;flex-direction:column;gap:13px;box-shadow:0 8px 24px rgba(28,27,25,.05);
+}
+.quote::before{
+  content:"\201C";position:absolute;right:24px;top:11px;
+  font-family:var(--font-serif),serif;font-weight:500;
+  font-size:58px;line-height:1;color:rgba(180,85,47,.14);
+}
+.quote .q{
+  font-family:var(--font-serif),serif;font-weight:500;
+  font-size:clamp(17px,1.85vw,19px);line-height:1.55;
+  color:var(--ink-strong);
+  /* 인용구 오른쪽 위 따옴표 장식과 겹치지 않게 */
+  padding-right:34px;
+}
+.quote .body{font-size:15px;color:var(--ink-soft)}
+.quote .who{font-size:14px;color:var(--ink-muted);margin-top:auto;padding-top:2px}
+.foot-note{margin-top:18px;font-size:14px;color:var(--ink-muted);max-width:var(--measure-wide)}
+
+/* ── 경력 ─────────────────────────────────────────────── */
+.timeline{margin-bottom:clamp(32px,5vw,44px)}
+.career-title{margin-bottom:clamp(24px,3.5vw,32px)}
+.job{
+  display:grid;gap:4px 28px;padding:20px clamp(18px,2.5vw,26px);
+  border:1px solid var(--line-soft);border-radius:var(--radius-sm);background:var(--surface);
+}
+.job+.job{margin-top:10px}
+@media (min-width:780px){.job{grid-template-columns:178px minmax(0,1fr)}}
+.job .period{font-size:14px;color:var(--ink-muted);line-height:1.9;white-space:nowrap}
+.job>div{min-width:0}
+.job .org{font-size:16.5px;font-weight:600;line-height:1.5;color:var(--ink-strong);margin-bottom:3px;max-width:var(--measure-wide)}
+.job .role{font-size:15px;color:var(--ink-soft);max-width:var(--measure-wide)}
+.job .detail{font-size:14.5px;color:var(--ink-muted);margin-top:5px;max-width:var(--measure-wide)}
+
+.creds{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px}
+.creds>div{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius-sm);padding:24px;box-shadow:0 8px 24px rgba(28,27,25,.04)}
+.creds h3{font-size:12.5px;letter-spacing:.1em;color:var(--ink-muted);font-weight:600;margin-bottom:13px}
+.creds li+li{margin-top:11px}
+.creds li{font-size:15.5px;line-height:1.55;color:var(--ink)}
+.creds .meta{display:block;font-size:14px;color:var(--ink-muted)}
+
+/* ── 푸터 ─────────────────────────────────────────────── */
+.site-foot{background:var(--dark);color:#ededea;padding-block:clamp(50px,7vw,82px)}
+.foot-inner{display:flex;flex-wrap:wrap;gap:26px 52px;align-items:flex-end;justify-content:space-between}
+.foot-copy{flex:1 1 320px;min-width:0}
+.foot-copy h2{font-size:clamp(21px,3vw,30px);line-height:1.4;color:#fff;margin-bottom:11px;max-width:17ch}
+.foot-copy p{font-size:15.5px;color:#a5a19a;max-width:var(--measure)}
+.contacts{flex:0 1 330px;min-width:min(100%,240px);display:flex;flex-direction:column;gap:6px}
+.contacts a{
+  display:flex;flex-wrap:wrap;gap:4px 16px;
+  align-items:baseline;justify-content:space-between;
+  min-height:var(--tap);
+  font-size:16px;text-decoration:none;padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.28);
+  transition:border-color .15s;
+}
+.contacts a:hover{border-bottom-color:rgba(255,255,255,.75)}
+.contacts .label{color:#a5a19a;font-size:15px}
+.contacts .value{font-weight:600;overflow-wrap:anywhere}
+.copyright{margin-top:clamp(26px,4vw,34px);font-size:13px;color:#918d85}
+
+/* ── 등장 애니메이션 ─────────────────────────────────── */
+/* 이력서에 어울리는 정도로만 — 살짝 떠오르며 나타나고 끝입니다.
+   자바스크립트는 쓰지 않습니다. 스크롤 위치를 타임라인으로 삼는
+   CSS 기능(animation-timeline)만으로 처리합니다.
+
+   중요한 규칙: 숨김 상태(opacity:0)를 평소 스타일에 두지 않고
+   키프레임 안에만 둡니다. 그래서 애니메이션이 안 걸리는 상황
+   — 미지원 브라우저, 움직임 줄이기 설정, 인쇄 — 에서는 요소가
+   처음부터 그냥 보입니다. 내용이 안 보이는 사고가 날 수 없습니다. */
+@keyframes rise-in{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  /* 히어로는 스크롤 전에 이미 보이는 자리라 로드될 때 한 번만 */
+  .hero-copy>*,.hero-media{animation:rise-in .5s ease-out both}
+  .hero-copy>*:nth-child(2){animation-delay:.05s}
+  .hero-copy>*:nth-child(3){animation-delay:.1s}
+  .hero-copy>*:nth-child(4){animation-delay:.15s}
+  .hero-copy>*:nth-child(5){animation-delay:.2s}
+  .hero-media{animation-delay:.25s}
+
+  /* 나머지는 화면에 들어올 때. 각 요소가 제 순서에 나타나므로
+     따로 지연을 주지 않아도 자연스럽게 시차가 생깁니다.
+
+     timeline 과 range 는 각각 따로 지원될 수 있습니다. range 를 무시하는
+     브라우저에서는 등장이 제때 끝나지 않아 읽는 동안 글이 흐릴 수 있어,
+     둘 다 있을 때만 켭니다. */
+  @supports ((animation-timeline:view()) and (animation-range:entry 5% entry 60%)){
+    .facts,.card,.case,.pending li,.quote,.job,.creds>div,
+    .section>.wrap>.eyebrow,.section>.wrap>.h2,.section>.wrap>.sec-head{
+      animation:rise-in linear both;
+      animation-timeline:view();
+      /* 요소가 화면에 들어오기 시작해 60% 들어왔을 때 끝납니다.
+         다 보이기 전에 끝나야 읽는 동안 움직이지 않습니다. */
+      animation-range:entry 5% entry 60%;
+    }
+  }
+}
+
+/* ── 사진 자리표시자 ─────────────────────────────────── */
+/* 안에 <img> 를 넣으면 칸을 꽉 채웁니다. */
+.slot{
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:14px;border:1px dashed rgba(28,27,25,.22);border-radius:var(--radius-sm);
+  background:var(--tint);color:var(--ink-muted);font-size:13.5px;line-height:1.5;
+  overflow:hidden;
+}
+.slot>img{width:100%;height:100%;object-fit:cover;border:0}
+.slot:has(>img){padding:0;border-style:solid;border-color:var(--line-soft)}
+
+@media (max-width:859px){
+  .hero-media{max-width:460px;width:100%;margin-inline:auto}
+}
+@media (max-width:680px){
+  :root{--pad-y:52px}
+  .brand-role{display:none}
+  .cta{padding:0 16px}
+  .h2{max-width:none}
+  .hero{border-radius:20px;margin-top:10px;padding-block:34px}
+  .hero h1{max-width:none}
+  .hero-actions{display:grid;grid-template-columns:1fr 1fr}
+  .hero-action{padding-inline:10px}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:16px}
+  .fact+.fact{border-left:0}
+  .fact:nth-child(even){border-left:1px solid var(--line-soft)}
+  .fact:nth-child(n+3){border-top:1px solid var(--line-soft)}
+  .quotes{grid-template-columns:1fr}
+  .quote .q{padding-right:30px}
+  .case-head{align-items:flex-start}
+  .badge{white-space:normal}
+  .job .period{white-space:normal}
+  .foot-copy h2{max-width:none}
+}
+/* 좁은 화면에서는 본문 글자가 줄어들면 오히려 읽기 어려워 최소치를 올린다 */
+@media (max-width:430px){
+  .hero .sub,.row p,.change .what,.creds li{font-size:15px}
+  .card p,.quote .body,.note,.pending p,.job .role{font-size:15px}
+  .job .detail,.case-meta,.quote .who,.sec-note,.foot-note{font-size:14px}
+}
+@media (max-width:420px){
+  .hero-actions{grid-template-columns:1fr}
+  .facts{grid-template-columns:1fr}
+  .fact:nth-child(even){border-left:0}
+  .fact+.fact{border-top:1px solid var(--line-soft)}
+}
+
+/* ── 인쇄 ─────────────────────────────────────────────── */
+@media print{
+  :root{--pad-y:20px;--gutter:0}
+  /* 등장 애니메이션을 지운다. 숨김 상태는 키프레임 안에만 있으므로
+     애니메이션을 없애면 요소가 전부 보이는 상태로 돌아간다. */
+  *,*::before,*::after{animation:none!important}
+  body{background:#fff;font-size:11pt;line-height:1.55}
+  .site-head{position:static;background:#fff;backdrop-filter:none;border-bottom:1px solid #bbb}
+  .nav,.skip,.slot,.pending,.hero-media,.hero-actions,.hero-kicker{display:none}
+  .band-dark,.band-pale,.site-foot{background:#fff!important;color:#000!important;border:0}
+  .hero-outer{padding-inline:0}
+  .hero{background:#fff;border:0;border-radius:0;box-shadow:none;margin-top:0;padding-inline:0;display:block}
+  .hero h1,.h2,.case-title,.foot-copy h2{max-width:none}
+  .band-dark .h2,.card h3,.foot-copy h2{color:#000!important}
+  .card p,.foot-copy p,.contacts .label{color:#333!important}
+  .card{border-color:#bbb;background:#fff}
+  .facts,.job,.creds>div,.case,.quote{box-shadow:none;background:#fff}
+  .contacts a{border-bottom-color:#bbb}
+  .section{padding-block:16px;break-inside:avoid}
+  .case,.quote,.job{break-inside:avoid}
+}
