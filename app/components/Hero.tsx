@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { facts, hero } from "@/content/resume";
 
 export function Hero() {
@@ -23,8 +24,19 @@ export function Hero() {
             </div>
           </div>
           <div className="hero-media">
-            {/* 사진을 넣으려면 이 div 안에 <img> 를 두면 칸을 꽉 채웁니다. */}
-            <div className="slot portrait">{hero.portraitPlaceholder}</div>
+            <div className="slot portrait">
+              {/* 첫 화면에 보이는 사진이라 lazy 로딩을 끕니다(priority).
+                  실제 표시 폭은 최대 340px 이므로 sizes 로 알려 줘야
+                  Next 가 원본이 아닌 작은 변형을 고릅니다. */}
+              <Image
+                src="/profile.jpeg"
+                alt={hero.portraitAlt}
+                width={800}
+                height={1000}
+                sizes="(min-width: 860px) 340px, (min-width: 460px) 460px, 100vw"
+                priority
+              />
+            </div>
             <p className="hero-caption">{hero.caption}</p>
           </div>
         </section>

@@ -40,7 +40,7 @@ export const hero = {
     { href: "#case", label: "치료 사례 보기", variant: "primary" },
     { href: "#career", label: "경력 · 자격 확인", variant: "secondary" },
   ],
-  portraitPlaceholder: "프로필 사진 (선택)",
+  portraitAlt: "최아영 작업치료사 프로필 사진",
   caption: "관찰과 기록으로 치료의 순서를 설계합니다",
 } as const;
 

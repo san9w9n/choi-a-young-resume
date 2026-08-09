@@ -218,13 +218,15 @@ h1,h2,h3{text-wrap:balance}
 }
 .hero-caption::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--accent)}
 
+/* 인물 사진이라 어느 폭에서나 세로 비율을 유지한다. 가로로 넓은 칸에
+   object-fit:cover 로 넣으면 얼굴이 잘린다. 4/5 는 원본(3300×4200 ≈ 0.79)에
+   가까워 잘려 나가는 부분이 거의 없다. */
 .portrait{
-  width:100%;height:clamp(220px,44vw,340px);
+  width:100%;aspect-ratio:4/5;
   border-radius:calc(var(--radius-md) + 2px);
   background:var(--tint);
   border:1px solid rgba(28,27,25,.14);
 }
-@media (min-width:860px){.portrait{height:auto;aspect-ratio:4/5}}
 
 /* ── 요약 지표 ────────────────────────────────────────── */
 .facts{
@@ -410,7 +412,7 @@ h1,h2,h3{text-wrap:balance}
 .slot:has(>img){padding:0;border-style:solid;border-color:var(--line-soft)}
 
 @media (max-width:859px){
-  .hero-media{max-width:460px;width:100%;margin-inline:auto}
+  .hero-media{max-width:380px;width:100%;margin-inline:auto}
 }
 @media (max-width:680px){
   :root{--pad-y:52px}
@@ -452,7 +454,13 @@ h1,h2,h3{text-wrap:balance}
   *,*::before,*::after{animation:none!important}
   body{background:#fff;font-size:11pt;line-height:1.55}
   .site-head{position:static;background:#fff;backdrop-filter:none;border-bottom:1px solid #bbb}
-  .nav,.skip,.slot,.pending,.hero-media,.hero-actions,.hero-kicker{display:none}
+  .nav,.skip,.pending,.hero-actions,.hero-kicker{display:none}
+  /* 사진이 들어 있지 않은 빈 자리표시자만 숨긴다 */
+  .slot:not(:has(>img)){display:none}
+  .hero-media:not(:has(img)){display:none}
+  /* 이력서 인쇄물에는 증명사진을 넣는 게 관례라 오른쪽 위에 작게 싣는다 */
+  .hero-media{float:right;width:32mm;margin:0 0 6mm 8mm}
+  .hero-caption{display:none}
   .band-dark,.band-pale,.site-foot{background:#fff!important;color:#000!important;border:0}
   .hero-outer{padding-inline:0}
   .hero{background:#fff;border:0;border-radius:0;box-shadow:none;margin-top:0;padding-inline:0;display:block}
