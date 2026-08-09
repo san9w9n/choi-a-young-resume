@@ -61,22 +61,23 @@ python3 -m http.server 8000
 ## 내용 수정 안내
 
 - **연락처** — `index.html` 맨 아래 `<footer id="contact">` 안의 이메일/전화번호 두 곳(링크 `href` 와 화면 표시 텍스트)을 함께 수정
-- **사진 · 영상** — `class="slot"` 인 회색 점선 박스가 자리표시자입니다. 크기는 클래스가 정하므로 박스 안에 태그만 넣으면 자동으로 꽉 채워집니다.
+- **프로필 사진** — 히어로의 회색 점선 박스(`class="slot portrait"`)가 자리표시자입니다.
+  크기는 클래스가 정하므로 박스 안에 태그만 넣으면 자동으로 꽉 채워집니다.
   ```html
-  <!-- 프로필 사진 -->
   <div class="slot portrait">
     <img src="images/portrait.jpg" alt="프로필 사진">
   </div>
-
-  <!-- 유튜브 영상 (치료 영상 섹션) -->
-  <div class="slot">
-    <iframe src="https://www.youtube.com/embed/영상ID" title="스윙 활동" allowfullscreen></iframe>
-  </div>
-
-  <!-- 직접 올린 영상 파일 -->
-  <div class="slot">
-    <video src="videos/swing.mp4" controls playsinline></video>
-  </div>
   ```
+  `<video>` 나 `<iframe>` 을 넣어도 같은 방식으로 채워집니다.
 - **치료 사례 추가** — `사례 01` 의 `<article class="case">` 를 복사해 내용을 바꾸고, 그 아래 `<ul class="pending">` 의 점선 박스를 지우면 됩니다.
 - **인쇄 / PDF** — 브라우저 인쇄를 하면 내비게이션·사진칸·준비 중 항목이 빠지고 흑백으로 정리된 이력서 형태로 출력됩니다.
+
+## 파비콘
+
+`favicon-32.png` · `favicon-96.png` · `apple-touch-icon.png` 세 장이며,
+차콜(`--band`) 바탕에 흰 `최` 입니다. 사이트 본문과 같은 SUIT 서체로 미리 구워 둔
+이미지라 어느 브라우저에서나 같은 모양으로 보입니다.
+
+바꾸려면 원하는 크기의 PNG 로 교체하고 `<head>` 의 `<link rel="icon">` 경로만 맞추면 됩니다.
+SVG 파비콘은 일부러 쓰지 않았습니다 — 글자를 보는 사람의 시스템 폰트로 그리기 때문에
+기기마다 서체가 달라집니다.

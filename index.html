@@ -14,7 +14,9 @@
 <meta property="og:description" content="치료실에서의 변화가 아동의 하루로 이어지도록. 아동 평가·치료·보호자 상담·가정지도.">
 <meta name="twitter:card" content="summary">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23232322'/><text x='16' y='22' font-size='17' font-family='sans-serif' fill='%23fff' text-anchor='middle'>최</text></svg>">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-96.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,7 +98,6 @@ a{color:inherit}
   color:var(--band-ink)
 }
 .band-pale{background:var(--tint);border-block:1px solid var(--line-soft)}
-.band-rule{border-top:1px solid var(--line-soft)}
 
 /* ── 타이포 ───────────────────────────────────────────── */
 .serif{font-family:Hahmlet,serif;font-weight:600;letter-spacing:-.02em}
@@ -339,14 +340,6 @@ a{color:inherit}
 .creds li,.creds p{font-size:15.5px;line-height:1.55;color:var(--ink)}
 .creds .meta{display:block;font-size:13.5px;color:var(--ink-faint)}
 
-/* ── 영상 ─────────────────────────────────────────────── */
-.videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-.video-item{display:flex;flex-direction:column;gap:10px}
-.video-item .slot{width:100%;aspect-ratio:16/10;border-radius:var(--radius-sm)}
-.video-item h3{font-size:15.5px;font-weight:600;color:var(--ink-strong);margin-bottom:2px}
-.video-item p{font-size:14px;color:var(--ink-muted);text-wrap:pretty}
-.video-note{margin-top:18px;max-width:none}
-
 /* ── 푸터 ─────────────────────────────────────────────── */
 .site-foot{
   background:var(--dark);
@@ -369,7 +362,7 @@ a{color:inherit}
 .contacts .value{font-weight:600;overflow-wrap:anywhere;white-space:nowrap}
 .copyright{margin-top:clamp(26px,4vw,34px);font-size:12.5px;color:#918d85}
 
-/* ── 사진·영상 자리표시자 ─────────────────────────────── */
+/* ── 사진 자리표시자 ─────────────────────────────────── */
 /* 안에 <img>/<video>/<iframe> 을 넣으면 칸을 꽉 채웁니다. */
 .slot{
   display:flex;align-items:center;justify-content:center;text-align:center;
@@ -445,7 +438,6 @@ a{color:inherit}
       <a href="#case">치료 사례</a>
       <a href="#voice">후기</a>
       <a href="#career">경력 &middot; 자격</a>
-      <a href="#video">치료 영상</a>
     </nav>
   </div>
 </header>
@@ -697,41 +689,6 @@ a{color:inherit}
     </div>
   </section>
 
-  <section id="video" class="section band-rule">
-    <div class="wrap">
-      <div class="sec-head">
-        <div>
-          <p class="eyebrow">치료 영상</p>
-          <h2 class="serif h2">활동이 어떻게 진행되는지</h2>
-        </div>
-        <p class="sec-note">보호자 동의를 받은 자료만 사용하며, 아동의 얼굴과 음성이 드러나지 않도록 편집합니다.</p>
-      </div>
-      <div class="videos">
-        <article class="video-item">
-          <div class="slot">영상 1 &mdash; 스윙 &middot; 전정 활동</div>
-          <div>
-            <h3>스윙 활동 &mdash; 체간 조절</h3>
-            <p>어떤 목표로 진행한 활동인지 한 줄 설명을 넣습니다.</p>
-          </div>
-        </article>
-        <article class="video-item">
-          <div class="slot">영상 2 &mdash; 구강 &middot; 관절 마사지</div>
-          <div>
-            <h3>가정지도용 마사지 안내</h3>
-            <p>보호자에게 보내 드리는 가정 활동 안내 영상입니다.</p>
-          </div>
-        </article>
-        <article class="video-item">
-          <div class="slot">영상 3 &mdash; 치료실 &middot; 교구</div>
-          <div>
-            <h3>치료실과 교구 소개</h3>
-            <p>사용하는 감각 자극 도구를 짧게 소개합니다.</p>
-          </div>
-        </article>
-      </div>
-      <p class="sec-note video-note">영상 링크를 주시면 각 칸에서 바로 재생되도록 연결하겠습니다.</p>
-    </div>
-  </section>
 
 </main>
 
