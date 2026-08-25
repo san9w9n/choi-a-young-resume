@@ -43,10 +43,10 @@ export const hero = {
 
 export const facts = [
   { term: "면허", value: "작업치료사 · 2022" },
-  { term: "현재 근무", value: "감각통합실 3개 기관" },
-  { term: "담당 업무", value: "감각통합치료" },
   { term: "학회", value: "대한감각통합치료학회 정회원" },
   { term: "자격", value: "발달재활서비스 제공인력 자격" },
+  { term: "현재 근무", value: "감각통합실 3개 기관" },
+  { term: "담당 업무", value: "감각통합치료" },
 ] as const;
 
 export const approach = {
