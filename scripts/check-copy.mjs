@@ -43,6 +43,8 @@ function sentencesOf(text) {
 const problems = [];
 /** 총량 계산에 들어간 문안. 중복 없이 한 번씩만 더합니다. */
 const bodyTexts = [];
+/** 보호자 원문 인용. 상한은 두지 않고 분량만 보고합니다. */
+const quoteTexts = [];
 
 /** @param {string} where @param {string} text @param {number} maxSentences */
 function check(where, text, maxSentences = MAX_SENTENCES_PER_PARAGRAPH) {
@@ -103,9 +105,13 @@ approach.steps.forEach((step, i) => {
 
 voices.items.forEach((item, i) => {
   check(`voices.items[${i}].quote`, item.quote, 1);
-  // 보호자 원문을 옮긴 것이라 한 문장으로 못 줄이는 경우가 있습니다.
-  // 총량 상한이 진짜 제어 장치이고, 문장 수는 그 보조 수단입니다.
-  check(`voices.items[${i}].body`, item.body);
+  // 본문은 보호자가 직접 쓴 말을 옮긴 것입니다. 우리가 쓴 문장이 아니므로
+  // 길이를 재단하지 않고, 카드가 내용에 맞춰 늘어나게 둡니다. 대신 총량을
+  // 따로 세어 후기 분량이 얼마나 되는지는 눈에 보이게 합니다.
+  const body = item.body;
+  for (const paragraph of typeof body === "string" ? [body] : body) {
+    quoteTexts.push(paragraph);
+  }
 });
 check("voices.footNote", voices.footNote, 1);
 
@@ -118,6 +124,7 @@ career.jobs.forEach((job, i) => {
 check("contact.body", contact.body, 1);
 
 const bodyChars = bodyTexts.join("").length;
+const quoteChars = quoteTexts.join("").length;
 if (bodyChars > MAX_BODY_CHARS) {
   problems.push(
     `본문 총량: ${bodyChars}자 (최대 ${MAX_BODY_CHARS}자) — 문장을 더 줄이거나 문단을 지우세요`,
@@ -132,5 +139,5 @@ if (problems.length > 0) {
 
 console.log(
   `문안 검사 통과 — 본문 ${bodyChars}자 / ${MAX_BODY_CHARS}자, ` +
-    `문장 ${MAX_SENTENCE_CHARS}자 이하.`,
+    `문장 ${MAX_SENTENCE_CHARS}자 이하. 후기 인용 ${quoteChars}자(상한 없음).`,
 );
