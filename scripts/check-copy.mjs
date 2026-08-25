@@ -13,7 +13,6 @@
 import {
   approach,
   career,
-  cases,
   contact,
   hero,
   site,
@@ -95,23 +94,12 @@ checkMeta("site.title", site.title);
 
 check("hero.lead", hero.lead, 1);
 check("hero.sub", hero.sub, 1);
-check("hero.caption", hero.caption, 1);
 
 approach.steps.forEach((step, i) => {
   check(`approach.steps[${i}].title`, step.title, 1);
   check(`approach.steps[${i}].body`, step.body, 1);
 });
 
-check("cases.note", cases.note, 1);
-cases.records.forEach((record, i) => {
-  const at = `cases.records[${i}]`;
-  record.analysis.forEach((p, j) => check(`${at}.analysis[${j}]`, p, 1));
-  record.goal.forEach((p, j) => check(`${at}.goal[${j}]`, p, 1));
-  record.activity.forEach((p, j) => check(`${at}.activity[${j}]`, p, 1));
-  record.changes.forEach((c, j) => check(`${at}.changes[${j}].what`, c.what));
-  if (record.note) check(`${at}.note`, record.note, 1);
-});
-cases.pending.forEach((p, i) => check(`cases.pending[${i}].body`, p.body, 1));
 
 voices.items.forEach((item, i) => {
   check(`voices.items[${i}].quote`, item.quote, 1);

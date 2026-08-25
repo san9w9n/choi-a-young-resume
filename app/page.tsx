@@ -1,6 +1,5 @@
 import { Approach } from "./components/Approach";
 import { Career } from "./components/Career";
-import { Cases } from "./components/Cases";
 import { Hero } from "./components/Hero";
 import { SiteFooter } from "./components/SiteFooter";
 import { SiteHeader } from "./components/SiteHeader";
@@ -16,7 +15,6 @@ export default function Page() {
       <main id="main">
         <Hero />
         <Approach />
-        <Cases />
         <Voices />
         <Career />
       </main>

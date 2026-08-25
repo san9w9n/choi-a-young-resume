@@ -210,13 +210,7 @@ h1,h2,h3{text-wrap:balance}
 }
 .hero-action:hover{transform:translateY(-2px)}
 .hero-action.primary{background:var(--band);color:#fff;box-shadow:0 10px 25px rgba(28,27,25,.16)}
-.hero-action.secondary{background:rgba(255,255,255,.7);border:1px solid var(--line);color:var(--band-deep)}
 .hero-media{position:relative;z-index:1;min-width:0}
-.hero-caption{
-  display:flex;align-items:center;gap:8px;margin-top:12px;
-  color:var(--ink-muted);font-size:13px;
-}
-.hero-caption::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--accent)}
 
 /* 인물 사진이라 어느 폭에서나 세로 비율을 유지한다. 가로로 넓은 칸에
    object-fit:cover 로 넣으면 얼굴이 잘린다. 4/5 는 원본(3300×4200 ≈ 0.79)에
@@ -253,46 +247,6 @@ h1,h2,h3{text-wrap:balance}
 .card p{font-size:15px;color:var(--band-ink)}
 
 /* ── 치료 사례 ────────────────────────────────────────── */
-.case{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden}
-.case+.case{margin-top:16px}
-.case-head{
-  padding:clamp(20px,3.4vw,32px);
-  border-bottom:1px solid var(--line-soft);
-  display:flex;flex-wrap:wrap;gap:14px 24px;
-  align-items:flex-end;justify-content:space-between;
-}
-.case-label{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--accent);margin-bottom:9px}
-.case-title{font-size:clamp(19px,2.5vw,26px);line-height:1.4;color:var(--ink-strong);margin-bottom:7px;max-width:22ch}
-.case-meta{font-size:14.5px;color:var(--ink-muted)}
-.badge{
-  font-size:14px;font-weight:700;color:var(--band);background:var(--tint);
-  border:1px solid rgba(28,27,25,.09);border-radius:999px;padding:8px 15px;white-space:nowrap;
-}
-.case-body{padding:clamp(20px,3.4vw,32px)}
-
-.row{display:grid;gap:8px 28px;padding-block:24px;border-top:1px solid var(--line-soft)}
-.row:first-child{padding-top:0;border-top:0}
-.row:last-child{padding-bottom:0}
-@media (min-width:680px){.row{grid-template-columns:96px minmax(0,1fr)}}
-.row .k{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--accent);line-height:1.9}
-.row p{font-size:15.5px;color:var(--ink-mid);max-width:var(--measure-wide)}
-.row .stack{display:flex;flex-direction:column;gap:10px;min-width:0}
-
-.changes{display:flex;flex-direction:column;gap:11px}
-.change{display:grid;gap:0 14px}
-@media (min-width:420px){.change{grid-template-columns:66px minmax(0,1fr)}}
-.change .when{font-size:14px;color:var(--ink-muted);line-height:1.9}
-.change .what{font-size:15.5px;color:var(--ink-mid);max-width:var(--measure-wide)}
-.note{
-  margin-top:14px;padding:17px 19px;background:var(--tint);border-radius:var(--radius-sm);
-  border-left:3px solid var(--accent);
-  font-size:15px;color:var(--ink-soft);max-width:var(--measure-wide);
-}
-
-.pending{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;margin-top:16px}
-.pending li{border:1px dashed rgba(28,27,25,.22);border-radius:var(--radius-sm);padding:20px 22px;background:rgba(255,255,255,.3)}
-.pending .n{font-size:12.5px;letter-spacing:.1em;color:var(--ink-muted);margin-bottom:6px}
-.pending p{font-size:15px;color:var(--ink-muted)}
 
 /* ── 후기 ─────────────────────────────────────────────── */
 .quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -389,7 +343,7 @@ h1,h2,h3{text-wrap:balance}
      브라우저에서는 등장이 제때 끝나지 않아 읽는 동안 글이 흐릴 수 있어,
      둘 다 있을 때만 켭니다. */
   @supports ((animation-timeline:view()) and (animation-range:entry 5% entry 60%)){
-    .facts,.card,.case,.pending li,.quote,.job,.creds>div,
+    .facts,.card,.quote,.job,.creds>div,
     .section>.wrap>.eyebrow,.section>.wrap>.h2,.section>.wrap>.sec-head{
       animation:rise-in linear both;
       animation-timeline:view();
@@ -420,7 +374,7 @@ h1,h2,h3{text-wrap:balance}
   .h2{max-width:none}
   .hero{border-radius:20px;margin-top:10px;padding-block:34px}
   .hero h1{max-width:none}
-  .hero-actions{display:grid;grid-template-columns:1fr 1fr}
+  .hero-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
   .hero-action{padding-inline:10px}
   .facts{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:16px}
   .fact+.fact{border-left:0}
@@ -428,19 +382,16 @@ h1,h2,h3{text-wrap:balance}
   .fact:nth-child(n+3){border-top:1px solid var(--line-soft)}
   .quotes{grid-template-columns:1fr}
   .quote .q{padding-right:30px}
-  .case-head{align-items:flex-start}
-  .badge{white-space:normal}
   .job .period{white-space:normal}
   .foot-copy h2{max-width:none}
 }
 /* 좁은 화면에서는 본문 글자가 줄어들면 오히려 읽기 어려워 최소치를 올린다 */
 @media (max-width:430px){
-  .hero .sub,.row p,.change .what,.creds li{font-size:15px}
-  .card p,.quote .body,.note,.pending p,.job .role{font-size:15px}
-  .job .detail,.case-meta,.quote .who,.sec-note,.foot-note{font-size:14px}
+  .hero .sub,.creds li{font-size:15px}
+  .card p,.quote .body,.job .role{font-size:15px}
+  .job .detail,.quote .who,.sec-note,.foot-note{font-size:14px}
 }
 @media (max-width:420px){
-  .hero-actions{grid-template-columns:1fr}
   .facts{grid-template-columns:1fr}
   .fact:nth-child(even){border-left:0}
   .fact+.fact{border-top:1px solid var(--line-soft)}
@@ -454,22 +405,21 @@ h1,h2,h3{text-wrap:balance}
   *,*::before,*::after{animation:none!important}
   body{background:#fff;font-size:11pt;line-height:1.55}
   .site-head{position:static;background:#fff;backdrop-filter:none;border-bottom:1px solid #bbb}
-  .nav,.skip,.pending,.hero-actions,.hero-kicker{display:none}
+  .nav,.skip,.hero-actions,.hero-kicker{display:none}
   /* 사진이 들어 있지 않은 빈 자리표시자만 숨긴다 */
   .slot:not(:has(>img)){display:none}
   .hero-media:not(:has(img)){display:none}
   /* 이력서 인쇄물에는 증명사진을 넣는 게 관례라 오른쪽 위에 작게 싣는다 */
   .hero-media{float:right;width:32mm;margin:0 0 6mm 8mm}
-  .hero-caption{display:none}
   .band-dark,.band-pale,.site-foot{background:#fff!important;color:#000!important;border:0}
   .hero-outer{padding-inline:0}
   .hero{background:#fff;border:0;border-radius:0;box-shadow:none;margin-top:0;padding-inline:0;display:block}
-  .hero h1,.h2,.case-title,.foot-copy h2{max-width:none}
+  .hero h1,.h2,.foot-copy h2{max-width:none}
   .band-dark .h2,.card h3,.foot-copy h2{color:#000!important}
   .card p,.foot-copy p,.contacts .label{color:#333!important}
   .card{border-color:#bbb;background:#fff}
-  .facts,.job,.creds>div,.case,.quote{box-shadow:none;background:#fff}
+  .facts,.job,.creds>div,.quote{box-shadow:none;background:#fff}
   .contacts a{border-bottom-color:#bbb}
   .section{padding-block:16px;break-inside:avoid}
-  .case,.quote,.job{break-inside:avoid}
+  .quote,.job{break-inside:avoid}
 }

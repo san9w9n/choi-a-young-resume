@@ -26,7 +26,6 @@ export const site = {
 
 export const nav = [
   { href: "#approach", label: "치료 접근" },
-  { href: "#case", label: "치료 사례" },
   { href: "#voice", label: "후기" },
   { href: "#career", label: "경력 · 자격" },
 ] as const;
@@ -37,11 +36,9 @@ export const hero = {
   lead: "아동발달센터와 심리·발달연구소 감각통합실에서 평가·치료·상담을 맡고 있습니다.",
   sub: "감각 반응은 아이마다 달라, 무엇을 먼저 다룰지 정하는 데서 시작합니다.",
   actions: [
-    { href: "#case", label: "치료 사례 보기", variant: "primary" },
-    { href: "#career", label: "경력 · 자격 확인", variant: "secondary" },
+    { href: "#career", label: "경력 · 자격 확인", variant: "primary" },
   ],
   portraitAlt: "최아영 작업치료사 프로필 사진",
-  caption: "관찰과 기록으로 치료의 순서를 설계합니다",
 } as const;
 
 export const facts = [
@@ -58,7 +55,7 @@ export const approach = {
     {
       step: "01 아동 분석",
       title: "먼저 관찰하고 평가합니다",
-      body: "감각력 조사와 SP2·DDST-2·DTVP-3·VMI 평가, 회기별 반응 기록.",
+      body: "감각력 파악과 평가, 회기별 반응 기록.",
     },
     {
       step: "02 목표 설정",
@@ -68,66 +65,13 @@ export const approach = {
     {
       step: "03 활동 계획",
       title: "역치에 맞게 강도를 조절합니다",
-      body: "많이 주기보다 역치에 맞게, 대체 활동도 함께.",
+      body: "감각 역치에 맞게, 대체 활동도 함께.",
     },
     {
       step: "04 변화 관찰",
       title: "작은 변화를 설명합니다",
-      body: "보호자의 언어로 전하고, 이어 갈 방법을 정합니다.",
+      body: "보호자와 상담하며 치료 계획을 정합니다.",
     },
-  ],
-} as const;
-
-export type CaseRecord = {
-  label: string;
-  title: string;
-  meta: string;
-  badge: string;
-  analysis: string[];
-  goal: string[];
-  activity: string[];
-  changes: { when: string; what: string }[];
-  /** 배지나 변화 목록이 이미 말하고 있으면 생략합니다. */
-  note?: string;
-};
-
-export const cases = {
-  eyebrow: "치료 사례",
-  heading: "실제 진행한 치료 기록",
-  note: "개인 정보는 제외했습니다.",
-  records: [
-    {
-      label: "사례 01",
-      title: "몸통이 안정되자 눈과 손이 따라왔습니다",
-      meta: "만 2세 · 약 1년간 진행 중",
-      badge: "보호자 요청으로 주 1회 → 주 3회",
-      analysis: [
-        "시야가 좁아 시각 추적이 어렵고 침 흘림이 잦았습니다.",
-        "짐볼과 스윙에서 몸이 흘러내렸습니다.",
-      ],
-      goal: [
-        "몸통이 안정돼야 눈과 손을 쓴다고 보고, 체간 조절과 하지 근력을 우선했습니다.",
-      ],
-      activity: [
-        "고관절 마사지와 관절 압박 뒤, 짐볼에서 글라이더 스윙으로 넓혔습니다.",
-        "스윙 중 허리·등 촉각 자극으로 체간 신전을 유도하고 비탈길 오르기를 더했습니다.",
-        "이후 전정·안구·시각 활동과 구강 치료(OTT)를 병행했습니다.",
-      ],
-      changes: [
-        { when: "약 2개월", what: "스스로 스윙 줄을 잡고 앉았습니다." },
-        { when: "약 5개월", what: "줄을 잡지 않고도 일정 시간 균형을 유지했습니다." },
-        {
-          when: "이후",
-          what: "눈맞춤과 시각 집중이 늘고 침 흘림이 줄었습니다. 호명에 “네”라고 답하기 시작했습니다.",
-        },
-      ],
-      // 횟수가 늘었다는 사실 자체는 카드 위 배지가 말하므로 여기서는 그 이유만 적습니다.
-      note: "변화를 기록하고 설명한 점이 신뢰로 이어졌습니다.",
-    },
-  ] satisfies CaseRecord[],
-  pending: [
-    { n: "사례 02", body: "준비 중" },
-    { n: "사례 03", body: "준비 중" },
   ],
 } as const;
 

@@ -37,7 +37,6 @@ export function Hero() {
                 priority
               />
             </div>
-            <p className="hero-caption">{hero.caption}</p>
           </div>
         </section>
       </div>
