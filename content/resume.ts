@@ -34,7 +34,6 @@ export const nav = [
 ] as const;
 
 export const hero = {
-  kicker: "OCCUPATIONAL THERAPIST",
   headline: "치료실에서의 변화가 아동의 하루로 이어지도록",
   lead: "아동발달센터와 심리·발달연구소 감각통합실에서 평가·치료·상담을 맡고 있습니다.",
   sub: "감각 반응은 아이마다 달라, 무엇을 먼저 다룰지 정하는 데서 시작합니다.",
@@ -53,26 +52,26 @@ export const facts = [
 ] as const;
 
 export const approach = {
-  eyebrow: "치료 접근",
-  heading: "한 아동을 만나면 이 순서로 진행합니다",
+  // "이"가 윗줄 끝에 혼자 남지 않도록 "이 순서로"를 줄바꿈 없는 공백으로 묶습니다.
+  heading: "한 아동을 만나면 이\u00A0순서로 진행합니다",
   steps: [
     {
-      step: "01 아동 분석",
+      step: "아동 분석",
       title: "먼저 관찰하고 평가합니다",
       body: "감각력 파악과 평가, 회기별 반응 기록.",
     },
     {
-      step: "02 목표 설정",
+      step: "목표 설정",
       title: "무엇을 먼저 다룰지 정합니다",
       body: "어려움이 겹칠 때 순서를 정하는 일이 방향을 좌우합니다.",
     },
     {
-      step: "03 활동 계획",
+      step: "활동 계획",
       title: "역치에 맞게 강도를 조절합니다",
       body: "감각 역치에 맞게, 대체 활동도 함께.",
     },
     {
-      step: "04 변화 관찰",
+      step: "변화 관찰",
       title: "작은 변화를 설명합니다",
       body: "보호자와 상담하며 치료 계획을 정합니다.",
     },
@@ -80,7 +79,6 @@ export const approach = {
 } as const;
 
 export const voices = {
-  eyebrow: "후기",
   heading: "보호자가 남긴 이야기",
   note: "센터 후기 게시판 10건 · 2025. 12.",
   footNote: "원문에서 발췌했으며 개인 정보는 제외했습니다.",
@@ -151,7 +149,6 @@ export type CareerJob = {
 };
 
 export const career = {
-  eyebrow: "경력 · 자격",
   heading: "근무와 배움의 기록",
   jobs: [
     {

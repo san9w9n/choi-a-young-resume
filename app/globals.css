@@ -9,29 +9,28 @@
   --ink-muted:#67645e;
   --line:rgba(28,27,25,.15);
   --line-soft:rgba(28,27,25,.08);
-  /* 짙은 띠 · 기본 버튼 */
+  /* 짙은 띠(치료 접근) · 기본 버튼 */
   --band:#232322;
   --band-deep:#121211;
   --band-ink:#c9c7c2;
-  /* 옅은 채움 (배지 · 인용 상자 · 사진칸) */
+  --band-line:rgba(255,255,255,.22);
+  /* 옅은 채움 (후기 섹션 배경 · 사진칸) */
   --tint:#f4f3f1;
-  /* 포인트색 — 라벨과 작은 글자에만 */
+  /* 포인트색 — 라벨, 현재 근무 표시, 초점선처럼 작은 곳에만 */
   --accent:#b0522c;
   --accent-soft:#dc9d78;
   --dark:#1a1917;
 
-  /* 본문은 SUIT(CDN), 제목은 Hahmlet(next/font 로 자체 호스팅) */
+  /* 본문은 SUIT(CDN), 제목·인용은 Hahmlet(next/font 로 자체 호스팅) */
   --font-sans:'SUIT Variable',SUIT,Pretendard,system-ui,-apple-system,sans-serif;
   --font-serif:var(--font-hahmlet),Hahmlet,serif;
 
-  --shadow-sm:0 10px 30px rgba(28,27,25,.06);
-  --shadow-md:0 22px 55px rgba(28,27,25,.09);
   --radius-sm:12px;
-  --radius-md:20px;
-  --radius-lg:30px;
+  --radius-md:16px;
+  --radius-lg:28px;
 
   --gutter:clamp(18px,5vw,60px);
-  --pad-y:clamp(56px,8vw,96px);
+  --pad-y:clamp(56px,8vw,104px);
   --maxw:1240px;
 
   /* 한 줄에 들어갈 글자 수 상한 — 한글은 40~45자가 읽기 편합니다. */
@@ -39,11 +38,10 @@
   --measure-wide:52ch;
   /* 손가락으로 누르는 대상의 최소 크기 */
   --tap:44px;
-  /* 고정 헤더 높이 — 앵커로 이동했을 때 섹션이 헤더에 가리지 않게 맞춥니다.
-     좁은 화면에서는 섹션 링크가 둘째 줄로 내려가 헤더가 그만큼 높아집니다. */
-  --head-h:120px;
+  /* 고정 헤더 높이. 앵커로 이동했을 때 섹션 제목이 헤더에 가리지 않게 맞춥니다.
+     헤더는 모든 폭에서 한 줄이라 값이 하나입니다. */
+  --head-h:64px;
 }
-@media (min-width:900px){:root{--head-h:70px}}
 
 /* ── 리셋 ─────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
@@ -66,8 +64,8 @@ body{
   /* 이메일·URL 처럼 어절로 못 끊는 긴 토큰은 그때만 강제로 끊습니다. */
   overflow-wrap:break-word;
 }
-h1,h2,h3,p,dd,figure{margin:0}
-ul{margin:0;padding:0;list-style:none}
+h1,h2,h3,p,dd,figure,blockquote{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
 img{max-width:100%;display:block}
 a{color:inherit}
 p,li,dd{text-wrap:pretty}
@@ -86,275 +84,321 @@ h1,h2,h3{text-wrap:balance}
 .section{padding-block:var(--pad-y)}
 .section,.site-foot{scroll-margin-top:var(--head-h)}
 .band-dark{background:var(--band);color:var(--band-ink)}
-.band-pale{background:var(--tint);border-block:1px solid var(--line-soft)}
+.band-pale{background:var(--tint)}
 
 /* ── 타이포 ───────────────────────────────────────────── */
+/* 단계: 13.5 · 15 · 16 · 18 · 22 · 28~38(섹션 제목) · 26~54(첫 제목).
+   제목·인용만 Hahmlet, 나머지는 SUIT 하나로 굵기와 크기만 바꿉니다. */
 .serif{font-family:var(--font-serif);font-weight:600;letter-spacing:-.02em}
-.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--accent);margin-bottom:12px}
-.band-dark .eyebrow{color:var(--accent-soft)}
-.h2{font-size:clamp(24px,3.2vw,36px);line-height:1.32;color:var(--ink-strong);max-width:20ch}
-.band-dark .h2{color:#fff;margin-bottom:clamp(28px,4vw,38px)}
+.h2{
+  font-size:clamp(25px,3.4vw,38px);line-height:1.3;color:var(--ink-strong);
+  max-width:20ch;margin-bottom:clamp(28px,4vw,48px);
+}
+.band-dark .h2{color:#fff}
 
 .sec-head{
   display:flex;flex-wrap:wrap;gap:8px 24px;
   align-items:baseline;justify-content:space-between;
-  margin-bottom:clamp(28px,4vw,42px);
+  margin-bottom:clamp(24px,3.5vw,40px);
 }
+.sec-head .h2{margin-bottom:0}
 .sec-note{font-size:14px;color:var(--ink-muted);max-width:34ch}
 
 /* ── 헤더 ─────────────────────────────────────────────── */
+/* 모든 폭에서 한 줄입니다. 예전처럼 좁은 화면에서 섹션 링크를 둘째 줄로
+   내리면 고정 헤더가 화면 위 112px 를 계속 차지했습니다. */
 .site-head{
   position:sticky;top:0;z-index:30;
-  padding-block:8px;
-  background:rgba(250,250,249,.88);
+  background:rgba(250,250,249,.9);
   border-bottom:1px solid var(--line-soft);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  transition:border-color .2s,background .2s;
 }
 /* backdrop-filter 미지원 브라우저에서는 반투명 배경이 뒤 내용과 겹치므로 불투명 처리 */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .site-head{background:var(--bg)}
 }
-.head-inner{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;min-height:var(--tap)}
-.brand{flex:1 1 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-width:0}
+.head-inner{display:flex;align-items:center;gap:12px;min-height:calc(var(--head-h) - 1px)}
+.brand{flex:0 0 auto;display:flex;align-items:baseline;gap:10px}
 .brand-name{font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--ink-strong)}
-.brand-role{font-size:13.5px;color:var(--ink-muted)}
+.brand-role{display:none;font-size:14px;color:var(--ink-muted)}
 
-/* 섹션 링크는 좁은 화면에서 줄바꿈 대신 가로 스크롤 */
+/* 링크가 다 들어가지 않는 아주 좁은 화면에서만 가로로 넘깁니다.
+   justify-content:flex-end 로 오른쪽에 붙이면 넘친 쪽이 왼쪽이 되어
+   스크롤로도 닿지 않으므로, 첫 링크의 auto 여백으로 밀어 붙입니다. */
 .nav{
-  order:3;width:100%;
-  display:flex;align-items:center;gap:2px;font-size:14.5px;
+  order:2;flex:1 1 auto;min-width:0;
+  display:flex;align-items:center;
   overflow-x:auto;overscroll-behavior-x:contain;
   scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  margin-inline:calc(var(--gutter) * -1);
-  padding:2px var(--gutter);
-  /* 오른쪽 페이드로 더 스크롤할 수 있음을 표시 */
-  -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);
-  mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);
 }
 .nav::-webkit-scrollbar{display:none}
+.nav a:first-child{margin-left:auto}
 .nav a{
-  display:inline-flex;align-items:center;min-height:var(--tap);
-  color:var(--ink-soft);text-decoration:none;white-space:nowrap;
-  padding:0 13px;border-radius:999px;transition:background .15s,color .15s;
+  flex:0 0 auto;display:inline-flex;align-items:center;min-height:var(--tap);
+  padding:0 8px;border-radius:999px;
+  font-size:14px;color:var(--ink-soft);text-decoration:none;white-space:nowrap;
+  transition:background .15s,color .15s;
 }
-.nav a:hover{color:var(--band-deep);background:rgba(28,27,25,.06)}
+.nav a:hover{color:var(--ink-strong);background:rgba(28,27,25,.06)}
 
-/* 문의 버튼은 스크롤 영역 밖에 두어 항상 보이게 */
+/* 마크업에서는 문의 버튼이 링크보다 먼저 옵니다(키보드로 가장 먼저 닿게).
+   화면에서는 오른쪽 끝에 둡니다. */
 .cta{
-  order:2;flex:0 0 auto;
-  display:inline-flex;align-items:center;min-height:var(--tap);
-  background:var(--band);color:#fff;font-weight:600;font-size:14.5px;
+  order:3;flex:0 0 auto;
+  display:inline-flex;align-items:center;min-height:40px;
+  background:var(--band);color:#fff;font-weight:600;font-size:14px;
   text-decoration:none;white-space:nowrap;
-  padding:0 20px;border-radius:999px;
-  box-shadow:0 8px 20px rgba(28,27,25,.16);
-  transition:background .15s,transform .15s,box-shadow .15s;
+  padding:0 16px;border-radius:999px;
+  transition:background .15s;
 }
-.cta:hover{background:var(--band-deep);color:#fff;transform:translateY(-1px);box-shadow:0 10px 24px rgba(28,27,25,.22)}
+.cta:hover{background:var(--band-deep);color:#fff}
 
-/* 브랜드 + 4개 링크 + 버튼이 한 줄에 다 들어가는 폭부터 데스크톱 배치 */
+/* 360px 미만: 간격을 줄여 세 링크와 문의 버튼을 한 줄에 맞춥니다
+   (320px 에서 실측으로 넘침 0). 글자 크기를 키운 기기에서 넘치면
+   .nav 가 옆으로 넘어갑니다. */
+@media (max-width:359px){
+  .head-inner{gap:6px}
+  .nav a{padding:0 6px;font-size:13.5px}
+  .cta{padding:0 13px}
+}
+@media (min-width:600px){
+  .brand-role{display:inline}
+  .nav a{padding:0 12px;font-size:14.5px}
+  .cta{padding:0 20px;min-height:var(--tap);font-size:14.5px}
+}
 @media (min-width:900px){
-  .head-inner{gap:10px 28px}
-  .nav{
-    order:2;width:auto;margin-inline:0;padding:0;
-    -webkit-mask-image:none;mask-image:none;
-  }
-  .cta{order:3;margin-left:2px}
+  .head-inner{gap:24px}
 }
 
 /* ── 히어로 ───────────────────────────────────────────── */
+/* 좁은 화면: 카드 테두리 없이 화면 폭을 그대로 씁니다. 사진은 작게 줄여
+   이름과 함께 맨 위에 둡니다 — 첫 화면에 얼굴·이름·한 줄 소개가 다 보이게.
+   넓은 화면: 흰 카드 하나에 글(왼쪽)과 큰 사진(오른쪽)을 나란히 둡니다. */
+.hero-outer{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
 .hero{
-  display:grid;grid-template-columns:1fr;
-  gap:clamp(28px,5vw,62px);
-  margin-top:clamp(14px,2.5vw,28px);
-  padding-block:clamp(40px,6vw,76px);
-  background:var(--surface);
-  border:1px solid rgba(28,27,25,.09);
-  border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-md);
-  overflow:hidden;
-}
-/* .wrap 의 max-width 만으로는 1240px 미만에서 카드가 화면에 딱 붙으므로 바깥 여백을 준다 */
-.hero-outer{padding-inline:var(--gutter);margin-inline:auto;max-width:var(--maxw)}
-.hero-outer>.hero{margin-inline:0;padding-inline:clamp(24px,4vw,64px);max-width:none}
-@media (min-width:860px){
-  .hero{grid-template-columns:minmax(0,1.45fr) minmax(280px,.65fr);align-items:center}
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:22px;padding-block:24px 28px;
 }
 .hero-copy{min-width:0}
 .hero h1{
-  font-size:clamp(29px,4.8vw,54px);line-height:1.28;
-  color:var(--ink-strong);margin-bottom:clamp(18px,2.5vw,28px);
-  /* <br> 로 줄을 고정하지 않고 브라우저가 폭에 맞춰 고르게 끊도록 둡니다. */
-  max-width:16ch;
+  font-size:clamp(26px,7.2vw,54px);line-height:1.28;
+  color:var(--ink-strong);margin-bottom:16px;
 }
 .hero p{max-width:var(--measure)}
-.hero .lead{font-size:clamp(16.5px,1.65vw,19px);color:var(--ink-mid);margin-bottom:12px}
+.hero .lead{font-size:clamp(16.5px,1.6vw,19px);line-height:1.65;color:var(--ink-mid);margin-bottom:10px}
 .hero .sub{font-size:15.5px;color:var(--ink-soft)}
-.hero-kicker{
-  display:inline-flex;align-items:center;gap:8px;
-  margin-bottom:16px;color:var(--accent);
-  font-size:12.5px;font-weight:800;letter-spacing:.13em;
-}
-/* flex 자식이라 기본값(flex-shrink:1)이면 좁은 화면에서 선이 눌려 길이가 들쭉날쭉해진다 */
-.hero-kicker::before{content:"";flex:0 0 auto;width:28px;height:1px;background:var(--accent)}
-/* 320px 급 화면에서는 선+텍스트가 한 줄에 못 들어가 두 줄로 접히므로 선을 뺀다 */
-@media (max-width:359px){
-  .hero-kicker{letter-spacing:.08em}
-  .hero-kicker::before{display:none}
-}
-.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.hero-action{
-  display:inline-flex;align-items:center;justify-content:center;min-height:var(--tap);
-  padding:10px 20px;border-radius:999px;text-decoration:none;font-size:15px;font-weight:700;
-  transition:transform .15s,background .15s,border-color .15s;
-}
-.hero-action:hover{transform:translateY(-2px)}
-.hero-action.primary{background:var(--band);color:#fff;box-shadow:0 10px 25px rgba(28,27,25,.16)}
-.hero-media{position:relative;z-index:1;min-width:0}
 
-/* 인물 사진이라 어느 폭에서나 세로 비율을 유지한다. 가로로 넓은 칸에
-   object-fit:cover 로 넣으면 얼굴이 잘린다. 4/5 는 원본(3300×4200 ≈ 0.79)에
-   가까워 잘려 나가는 부분이 거의 없다. */
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.hero-action{
+  display:inline-flex;align-items:center;justify-content:center;min-height:48px;
+  padding:0 24px;border-radius:999px;text-decoration:none;font-size:15px;font-weight:700;
+  transition:background .15s;
+}
+.hero-action.primary{background:var(--band);color:#fff}
+.hero-action.primary:hover{background:var(--band-deep)}
+
+.hero-media{order:-1;display:flex;align-items:center;gap:16px;min-width:0}
+/* 인물 사진이라 어느 폭에서나 세로 비율을 유지합니다. 4/5 는 원본
+   (3300×4200 ≈ 0.79)에 가까워 잘려 나가는 부분이 거의 없습니다. */
 .portrait{
-  width:100%;aspect-ratio:4/5;
-  border-radius:calc(var(--radius-md) + 2px);
-  background:var(--tint);
-  border:1px solid rgba(28,27,25,.14);
+  flex:0 0 auto;width:96px;aspect-ratio:4/5;
+  border-radius:14px;background:var(--tint);
+}
+.hero-id{display:flex;flex-direction:column;gap:2px;min-width:0}
+.hero-name{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.3;color:var(--ink-strong)}
+.hero-role{font-size:15px;color:var(--ink-muted)}
+
+@media (min-width:860px){
+  .hero{
+    grid-template-columns:minmax(0,1.45fr) minmax(260px,.6fr);
+    align-items:center;gap:clamp(40px,5vw,72px);
+    margin-top:clamp(16px,2.4vw,28px);
+    padding:clamp(48px,5.5vw,80px) clamp(36px,4.5vw,72px);
+    background:var(--surface);
+    border:1px solid var(--line-soft);
+    border-radius:var(--radius-lg);
+  }
+  .hero h1{max-width:16ch;margin-bottom:24px}
+  .hero-actions{margin-top:32px}
+  .hero-media{order:0;display:block}
+  .portrait{width:100%;border-radius:20px}
+  .hero-id{flex-direction:row;align-items:baseline;gap:10px;margin-top:14px}
+  .hero-name{font-size:17px}
+  .hero-role{font-size:14.5px}
 }
 
 /* ── 요약 지표 ────────────────────────────────────────── */
-/* auto-fit 은 어디서 줄이 바뀌는지 CSS 가 알 수 없어, 줄 첫 칸에도 왼쪽
-   테두리가 붙습니다. 항목이 5개라 중간 폭에서 실제로 줄이 바뀌므로
-   구간마다 열 수를 고정하고 테두리 규칙을 그 열 수에 맞춥니다. */
-.facts{
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:0;background:var(--surface);border:1px solid var(--line-soft);
-  border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden;
+/* 좁은 화면: 이름표 | 값 의 두 칸 줄 목록. 칸 하나에 한 항목씩 쌓던 예전
+   방식보다 높이가 절반쯤입니다.
+   넓은 화면: 히어로 카드 아래 다섯 칸 한 줄. 위아래 가는 선만 두고 카드는
+   씌우지 않습니다. */
+.facts-wrap{padding-bottom:clamp(44px,6vw,80px)}
+.facts{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--line)}
+.fact{
+  display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:12px;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid var(--line-soft);min-width:0;
 }
-.facts-wrap{padding-bottom:clamp(30px,5vw,56px)}
-.fact{position:relative;padding:20px clamp(16px,2.4vw,28px);min-width:0}
-.fact+.fact{border-left:1px solid var(--line-soft)}
-.fact dt{font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--accent);margin-bottom:5px}
-.fact dd{font-size:15.5px;font-weight:650;line-height:1.5;color:var(--ink-strong)}
+.fact dt{font-size:13px;font-weight:700;color:var(--accent)}
+.fact dd{font-size:15.5px;font-weight:600;line-height:1.45;color:var(--ink-strong)}
+
+@media (min-width:600px) and (max-width:899px){
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
+}
+@media (min-width:900px){
+  .facts-wrap{padding-top:clamp(20px,2.4vw,28px)}
+  .facts{grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--line)}
+  .fact{display:block;padding:18px 20px;border-bottom:0}
+  .fact:first-child{padding-left:4px}
+  .fact+.fact{border-left:1px solid var(--line-soft)}
+  .fact dt{margin-bottom:4px}
+}
 
 /* ── 치료 접근 ────────────────────────────────────────── */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px}
-.card{
-  padding:clamp(20px,2.5vw,28px);border:1px solid rgba(255,255,255,.13);
-  border-radius:var(--radius-sm);background:rgba(255,255,255,.055);
-  transition:background .2s,transform .2s,border-color .2s;
+/* 페이지에서 유일하게 힘을 준 곳입니다. 네 단계는 실제로 순서가 있는
+   과정이라 큰 숫자를 선으로 이어 보여 줍니다. 숫자 뒤에 띠와 같은 색을
+   깔아 선이 숫자에서 끊겨 보이게 합니다.
+   좁은 화면은 세로선, 넓은 화면은 가로선입니다. */
+.steps{position:relative;display:grid;grid-template-columns:minmax(0,1fr)}
+.step{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);gap:18px;padding-bottom:30px}
+.step:last-child{padding-bottom:0}
+.step::before{
+  content:"";position:absolute;left:21.5px;top:48px;bottom:4px;
+  width:1px;background:var(--band-line);
 }
-.card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.26);transform:translateY(-3px)}
-.card .step{font-size:12.5px;letter-spacing:.1em;color:var(--accent-soft);margin-bottom:7px}
-.card h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
-.card p{font-size:15px;color:var(--band-ink)}
+.step:last-child::before{display:none}
+.step-num{
+  display:block;width:44px;height:44px;text-align:center;
+  font-size:36px;line-height:44px;font-weight:600;color:var(--accent-soft);
+  background:var(--band);
+}
+.step-label{font-size:13.5px;font-weight:700;color:var(--accent-soft);margin-bottom:4px}
+.step h3{font-size:18px;font-weight:700;line-height:1.45;color:#fff;margin-bottom:6px}
+.step-body{font-size:15px;color:var(--band-ink);max-width:30ch}
 
-/* ── 치료 사례 ────────────────────────────────────────── */
+@media (min-width:900px){
+  .steps{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:clamp(24px,3vw,48px)}
+  .steps::before{
+    content:"";position:absolute;left:0;right:0;top:40px;
+    height:1px;background:var(--band-line);
+  }
+  .step{display:block;padding:0}
+  .step::before{display:none}
+  .step-num{
+    display:inline-block;width:auto;height:80px;padding-right:18px;text-align:left;
+    font-size:68px;line-height:80px;
+  }
+  .step-text{margin-top:22px}
+  .step h3{font-size:19px}
+}
 
 /* ── 후기 ─────────────────────────────────────────────── */
-.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+/* 좁은 화면: 한 줄로 쌓습니다. 옆으로 넘기는 줄도 시험했지만 줄 높이가
+   가장 긴 카드(두 문단)에 맞춰져 다른 카드 아래가 350px 가까이 비었고,
+   긴 후기는 자르지 않기로 했으므로 쌓는 쪽을 택했습니다.
+   넓은 화면: 높이가 제각각인 카드를 단 나누기로 채웁니다. 격자로 두면
+   긴 카드 옆의 짧은 카드가 같이 늘어나 빈칸이 생겼습니다. */
+.quotes{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
 .quote{
-  position:relative;background:var(--surface);border:1px solid rgba(28,27,25,.08);
-  border-radius:var(--radius-md);padding:clamp(22px,3.2vw,32px);
-  display:flex;flex-direction:column;gap:13px;box-shadow:0 8px 24px rgba(28,27,25,.05);
+  display:flex;flex-direction:column;gap:14px;
+  background:var(--surface);border-radius:var(--radius-md);
+  padding:22px 20px 18px;
 }
-.quote::before{
-  content:"\201C";position:absolute;right:24px;top:11px;
-  font-family:var(--font-serif),serif;font-weight:500;
-  font-size:58px;line-height:1;color:rgba(180,85,47,.14);
-}
+.quote blockquote{display:flex;flex-direction:column;gap:10px}
 .quote .q{
   font-family:var(--font-serif),serif;font-weight:500;
-  font-size:clamp(17px,1.85vw,19px);line-height:1.55;
-  color:var(--ink-strong);
-  /* 인용구 오른쪽 위 따옴표 장식과 겹치지 않게 */
-  padding-right:34px;
+  font-size:clamp(17px,1.7vw,19px);line-height:1.5;color:var(--ink-strong);
 }
 .quote .body{font-size:15px;color:var(--ink-soft)}
-.quote .who{font-size:14px;color:var(--ink-muted);margin-top:auto;padding-top:2px}
-.foot-note{margin-top:18px;font-size:14px;color:var(--ink-muted);max-width:var(--measure-wide)}
+.quote .who{font-size:13.5px;color:var(--ink-muted);padding-top:12px;border-top:1px solid var(--line-soft)}
+.foot-note{margin-top:14px;font-size:14px;color:var(--ink-muted);max-width:var(--measure-wide)}
+
+@media (min-width:681px){
+  .quotes{display:block;columns:2;column-gap:16px}
+  .quote{break-inside:avoid;margin-bottom:16px;padding:26px 26px 22px}
+  .foot-note{margin-top:4px}
+}
+@media (min-width:1100px){
+  .quotes{columns:3}
+}
 
 /* ── 경력 ─────────────────────────────────────────────── */
-.timeline{margin-bottom:clamp(32px,5vw,44px)}
-.career-title{margin-bottom:clamp(24px,3.5vw,32px)}
-.job{
-  display:grid;gap:4px 28px;padding:20px clamp(18px,2.5vw,26px);
-  border:1px solid var(--line-soft);border-radius:var(--radius-sm);background:var(--surface);
+/* 시간 순서가 실제로 있는 목록이라 세로선 위에 점을 찍습니다.
+   지금 다니는 곳은 포인트색으로 채운 점입니다. */
+.timeline{margin-bottom:clamp(40px,6vw,72px)}
+.job{position:relative;padding:0 0 26px 28px}
+.job:last-child{padding-bottom:0}
+.job::before{
+  content:"";position:absolute;left:5px;top:12px;bottom:-12px;
+  width:1px;background:var(--line);
 }
-.job+.job{margin-top:10px}
-@media (min-width:780px){.job{grid-template-columns:178px minmax(0,1fr)}}
-.job .period{font-size:14px;color:var(--ink-muted);line-height:1.9;white-space:nowrap}
-.job>div{min-width:0}
-.job .org{font-size:16.5px;font-weight:600;line-height:1.5;color:var(--ink-strong);margin-bottom:3px;max-width:var(--measure-wide)}
-.job .role{font-size:15px;color:var(--ink-soft);max-width:var(--measure-wide)}
-.job .detail{font-size:14.5px;color:var(--ink-muted);margin-top:5px;max-width:var(--measure-wide)}
+.job:last-child::before{display:none}
+.job::after{
+  content:"";position:absolute;left:0;top:6px;width:11px;height:11px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--ink-muted);
+}
+.job.is-current::after{background:var(--accent);border-color:var(--accent)}
+.job .period{font-size:13.5px;line-height:23px;color:var(--ink-muted);font-variant-numeric:tabular-nums}
+.job.is-current .period{color:var(--accent);font-weight:600}
+.job-body{min-width:0}
+.job .org{font-size:16.5px;font-weight:650;line-height:1.45;color:var(--ink-strong);max-width:var(--measure-wide)}
+.job .role{font-size:15px;line-height:1.6;margin-top:3px;max-width:var(--measure-wide)}
+.role-title{font-weight:600;color:var(--ink-mid);margin-right:.6em}
+.role-duty{color:var(--ink-soft)}
+.job .detail{font-size:14.5px;color:var(--ink-muted);margin-top:4px;max-width:var(--measure-wide)}
 
-.creds{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px}
-.creds>div{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius-sm);padding:24px;box-shadow:0 8px 24px rgba(28,27,25,.04)}
-.creds h3{font-size:12.5px;letter-spacing:.1em;color:var(--ink-muted);font-weight:600;margin-bottom:13px}
-.creds li+li{margin-top:11px}
-.creds li{font-size:15.5px;line-height:1.55;color:var(--ink)}
-.creds .meta{display:block;font-size:14px;color:var(--ink-muted)}
+@media (min-width:780px){
+  .job{display:grid;grid-template-columns:200px minmax(0,1fr);padding:0 0 30px}
+  .job::before{left:205px}
+  .job::after{left:200px}
+  .job .period{line-height:24px}
+  .job-body{padding-left:30px}
+}
+
+.creds{
+  display:grid;grid-template-columns:minmax(0,1fr);gap:30px;
+  border-top:1px solid var(--line);padding-top:clamp(28px,4vw,40px);
+}
+@media (min-width:640px){.creds{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}}
+@media (min-width:1000px){.creds{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.cred-group h3{font-size:15px;font-weight:700;color:var(--ink-strong);margin-bottom:14px}
+.creds li{font-size:15.5px;line-height:1.5;color:var(--ink)}
+.creds li+li{margin-top:12px}
+.creds .meta{display:block;font-size:13.5px;color:var(--ink-muted);margin-top:1px}
 
 /* ── 푸터 ─────────────────────────────────────────────── */
-.site-foot{background:var(--dark);color:#ededea;padding-block:clamp(50px,7vw,82px)}
-.foot-inner{display:flex;flex-wrap:wrap;gap:26px 52px;align-items:flex-end;justify-content:space-between}
+.site-foot{background:var(--dark);color:#ededea;padding-block:clamp(52px,7vw,88px)}
+.foot-inner{display:flex;flex-wrap:wrap;gap:28px 56px;align-items:flex-end;justify-content:space-between}
 .foot-copy{flex:1 1 320px;min-width:0}
-.foot-copy h2{font-size:clamp(21px,3vw,30px);line-height:1.4;color:#fff;margin-bottom:11px;max-width:17ch}
+.foot-copy h2{font-size:clamp(23px,3vw,32px);line-height:1.38;color:#fff;margin-bottom:12px;max-width:17ch}
 .foot-copy p{font-size:15.5px;color:#a5a19a;max-width:var(--measure)}
-.contacts{flex:0 1 330px;min-width:min(100%,240px);display:flex;flex-direction:column;gap:6px}
+.contacts{flex:0 1 340px;min-width:min(100%,240px);display:flex;flex-direction:column;gap:4px}
 .contacts a{
   display:flex;flex-wrap:wrap;gap:4px 16px;
   align-items:baseline;justify-content:space-between;
-  min-height:var(--tap);
-  font-size:16px;text-decoration:none;padding:12px 0;
+  min-height:52px;padding:14px 0;
+  font-size:16px;text-decoration:none;
   border-bottom:1px solid rgba(255,255,255,.28);
   transition:border-color .15s;
 }
 .contacts a:hover{border-bottom-color:rgba(255,255,255,.75)}
 .contacts .label{color:#a5a19a;font-size:15px}
 .contacts .value{font-weight:600;overflow-wrap:anywhere}
-.copyright{margin-top:clamp(26px,4vw,34px);font-size:13px;color:#918d85}
+.copyright{margin-top:clamp(28px,4vw,40px);font-size:13px;color:#918d85}
 
-/* ── 등장 애니메이션 ─────────────────────────────────── */
-/* 이력서에 어울리는 정도로만 — 살짝 떠오르며 나타나고 끝입니다.
-   자바스크립트는 쓰지 않습니다. 스크롤 위치를 타임라인으로 삼는
-   CSS 기능(animation-timeline)만으로 처리합니다.
-
-   중요한 규칙: 숨김 상태(opacity:0)를 평소 스타일에 두지 않고
-   키프레임 안에만 둡니다. 그래서 애니메이션이 안 걸리는 상황
-   — 미지원 브라우저, 움직임 줄이기 설정, 인쇄 — 에서는 요소가
-   처음부터 그냥 보입니다. 내용이 안 보이는 사고가 날 수 없습니다. */
+/* ── 움직임 ───────────────────────────────────────────── */
+/* 페이지가 열릴 때 첫 화면이 한 번 떠오르는 것뿐입니다. 섹션마다 스크롤에
+   맞춰 나타나던 효과와 카드에 마우스를 올리면 뜨던 효과는 뺐습니다 —
+   읽는 데 도움이 되지 않고, 전체 화면 캡처에서 아래 섹션이 비어 보이게
+   만들기도 했습니다.
+   숨김 상태(opacity:0)는 키프레임 안에만 있어, 애니메이션이 안 걸리는
+   상황(움직임 줄이기, 인쇄)에서는 처음부터 그대로 보입니다. */
 @keyframes rise-in{
-  from{opacity:0;transform:translateY(12px)}
+  from{opacity:0;transform:translateY(10px)}
   to{opacity:1;transform:none}
 }
-
 @media (prefers-reduced-motion:no-preference){
-  /* 히어로는 스크롤 전에 이미 보이는 자리라 로드될 때 한 번만 */
-  .hero-copy>*,.hero-media{animation:rise-in .5s ease-out both}
-  .hero-copy>*:nth-child(2){animation-delay:.05s}
-  .hero-copy>*:nth-child(3){animation-delay:.1s}
-  .hero-copy>*:nth-child(4){animation-delay:.15s}
-  .hero-copy>*:nth-child(5){animation-delay:.2s}
-  .hero-media{animation-delay:.25s}
-
-  /* 나머지는 화면에 들어올 때. 각 요소가 제 순서에 나타나므로
-     따로 지연을 주지 않아도 자연스럽게 시차가 생깁니다.
-
-     timeline 과 range 는 각각 따로 지원될 수 있습니다. range 를 무시하는
-     브라우저에서는 등장이 제때 끝나지 않아 읽는 동안 글이 흐릴 수 있어,
-     둘 다 있을 때만 켭니다. */
-  @supports ((animation-timeline:view()) and (animation-range:entry 5% entry 60%)){
-    .facts,.card,.quote,.job,.creds>div,
-    .section>.wrap>.eyebrow,.section>.wrap>.h2,.section>.wrap>.sec-head{
-      animation:rise-in linear both;
-      animation-timeline:view();
-      /* 요소가 화면에 들어오기 시작해 60% 들어왔을 때 끝납니다.
-         다 보이기 전에 끝나야 읽는 동안 움직이지 않습니다. */
-      animation-range:entry 5% entry 60%;
-    }
-  }
+  .hero-copy,.hero-media{animation:rise-in .6s cubic-bezier(.2,.7,.2,1) both}
+  .hero-media{animation-delay:.08s}
 }
 
 /* ── 사진 자리표시자 ─────────────────────────────────── */
@@ -366,70 +410,45 @@ h1,h2,h3{text-wrap:balance}
   overflow:hidden;
 }
 .slot>img{width:100%;height:100%;object-fit:cover;border:0}
-.slot:has(>img){padding:0;border-style:solid;border-color:var(--line-soft)}
+.slot:has(>img){padding:0;border:0}
 
-@media (max-width:859px){
-  .hero-media{max-width:380px;width:100%;margin-inline:auto}
-}
-/* 5칸이 한 줄에 안 들어가는 폭 — 3열 두 줄 */
-@media (max-width:899px){
-  .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .fact+.fact{border-left:0}
-  .fact:not(:nth-child(3n+1)){border-left:1px solid var(--line-soft)}
-  .fact:nth-child(n+4){border-top:1px solid var(--line-soft)}
-}
-@media (max-width:680px){
-  :root{--pad-y:52px}
-  .cta{padding:0 16px}
-  .h2{max-width:none}
-  .hero{border-radius:20px;margin-top:10px;padding-block:34px}
-  .hero h1{max-width:none}
-  .hero-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-  .hero-action{padding-inline:10px}
-  .facts{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:16px}
-  .fact:not(:nth-child(3n+1)){border-left:0}
-  .fact:nth-child(even){border-left:1px solid var(--line-soft)}
-  .fact:nth-child(n+3){border-top:1px solid var(--line-soft)}
-  .quotes{grid-template-columns:1fr}
-  .quote .q{padding-right:30px}
-  .job .period{white-space:normal}
-  .foot-copy h2{max-width:none}
-}
-/* 좁은 화면에서는 본문 글자가 줄어들면 오히려 읽기 어려워 최소치를 올린다 */
+/* 좁은 화면에서는 본문 글자가 줄어들면 오히려 읽기 어려워 최소치를 지킵니다 */
 @media (max-width:430px){
   .hero .sub,.creds li{font-size:15px}
-  .card p,.quote .body,.job .role{font-size:15px}
-  .job .detail,.quote .who,.sec-note,.foot-note{font-size:14px}
-}
-@media (max-width:420px){
-  .facts{grid-template-columns:1fr}
-  .fact:nth-child(even){border-left:0}
-  .fact+.fact{border-top:1px solid var(--line-soft)}
 }
 
 /* ── 인쇄 ─────────────────────────────────────────────── */
 @media print{
   :root{--pad-y:20px;--gutter:0}
-  /* 등장 애니메이션을 지운다. 숨김 상태는 키프레임 안에만 있으므로
-     애니메이션을 없애면 요소가 전부 보이는 상태로 돌아간다. */
   *,*::before,*::after{animation:none!important}
   body{background:#fff;font-size:11pt;line-height:1.55}
   .site-head{position:static;background:#fff;backdrop-filter:none;border-bottom:1px solid #bbb}
-  .nav,.skip,.hero-actions,.hero-kicker{display:none}
-  /* 사진이 들어 있지 않은 빈 자리표시자만 숨긴다 */
+  .nav,.cta,.skip,.hero-actions{display:none}
+  h2,h3{break-after:avoid}
+  /* 사진이 들어 있지 않은 빈 자리표시자만 숨깁니다 */
   .slot:not(:has(>img)){display:none}
   .hero-media:not(:has(img)){display:none}
-  /* 이력서 인쇄물에는 증명사진을 넣는 게 관례라 오른쪽 위에 작게 싣는다 */
-  .hero-media{float:right;width:32mm;margin:0 0 6mm 8mm}
-  .band-dark,.band-pale,.site-foot{background:#fff!important;color:#000!important;border:0}
+  /* 이력서 인쇄물에는 증명사진을 넣는 게 관례라 오른쪽 위에 작게 싣습니다 */
+  .hero-media{order:0;display:block;width:32mm}
+  .portrait{width:100%}
+  .hero-id{display:none}
+  .band-dark,.band-pale,.site-foot{background:#fff!important;color:#000!important}
   .hero-outer{padding-inline:0}
-  .hero{background:#fff;border:0;border-radius:0;box-shadow:none;margin-top:0;padding-inline:0;display:block}
+  .hero{background:#fff;border:0;border-radius:0;margin-top:0;padding-inline:0;
+    grid-template-columns:minmax(0,1fr) 32mm;align-items:start;gap:8mm}
   .hero h1,.h2,.foot-copy h2{max-width:none}
-  .band-dark .h2,.card h3,.foot-copy h2{color:#000!important}
-  .card p,.foot-copy p,.contacts .label{color:#333!important}
-  .card{border-color:#bbb;background:#fff}
-  .facts,.job,.creds>div,.quote{box-shadow:none;background:#fff}
+  .band-dark .h2,.step h3,.foot-copy h2{color:#000!important}
+  .step-body,.foot-copy p,.contacts .label{color:#333!important}
+  .step-num{background:#fff;color:#000}
+  .step-label{color:var(--accent)}
+  /* 격자 목록은 Chromium 이 쪽을 넘겨 나누지 못해 목록 전체가 다음 쪽으로
+     밀리고 제목만 앞 쪽에 남습니다. 인쇄에서는 블록으로 흘려 보냅니다. */
+  .steps{display:block}
+  .step{break-inside:avoid}
+  .steps::before,.step::before{background:#bbb}
+  .quotes{display:block;columns:2}
+  .quote{break-inside:avoid;margin-bottom:4mm;border:1px solid #ddd}
   .contacts a{border-bottom-color:#bbb}
-  .section{padding-block:16px;break-inside:avoid}
+  .section{padding-block:16px}
   .quote,.job{break-inside:avoid}
 }
