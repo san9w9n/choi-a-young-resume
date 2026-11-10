@@ -31,14 +31,14 @@ export function Hero() {
           <figure className="hero-media">
             <div className="slot portrait">
               {/* 첫 화면에 보이는 사진이라 lazy 로딩을 끕니다(priority).
-                  표시 폭은 최대 340px 이므로 sizes 로 알려 줘야
+                  표시 폭은 최대 400px 이므로 sizes 로 알려 줘야
                   Next 가 원본이 아닌 작은 변형을 고릅니다. */}
               <Image
                 src="/profile.jpeg"
                 alt={hero.portraitAlt}
                 width={800}
                 height={1000}
-                sizes="(min-width: 860px) 340px, 120px"
+                sizes="(min-width: 860px) 400px, 180px"
                 priority
               />
             </div>

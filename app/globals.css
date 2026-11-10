@@ -201,7 +201,7 @@ h1,h2,h3{text-wrap:balance}
 /* 인물 사진이라 어느 폭에서나 세로 비율을 유지합니다. 4/5 는 원본
    (3300×4200 ≈ 0.79)에 가까워 잘려 나가는 부분이 거의 없습니다. */
 .portrait{
-  flex:0 0 auto;width:96px;aspect-ratio:4/5;
+  flex:0 0 auto;width:clamp(132px,40vw,180px);aspect-ratio:4/5;
   border-radius:14px;background:var(--tint);
 }
 .hero-id{display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -210,7 +210,8 @@ h1,h2,h3{text-wrap:balance}
 
 @media (min-width:860px){
   .hero{
-    grid-template-columns:minmax(0,1.45fr) minmax(260px,.6fr);
+    /* 사진 칸은 화면 폭의 30%(280~400px). 예전 .6fr 은 1440px 에서도 265px 였습니다. */
+    grid-template-columns:minmax(0,1fr) clamp(280px,30vw,400px);
     align-items:center;gap:clamp(40px,5vw,72px);
     margin-top:clamp(16px,2.4vw,28px);
     padding:clamp(48px,5.5vw,80px) clamp(36px,4.5vw,72px);
@@ -218,7 +219,9 @@ h1,h2,h3{text-wrap:balance}
     border:1px solid var(--line-soft);
     border-radius:var(--radius-lg);
   }
-  .hero h1{max-width:16ch;margin-bottom:24px}
+  /* 사진 칸이 커져 글 칸이 좁아졌으므로, 제목이 860~1440px 어디서나
+     두 줄로 떨어지도록 상한을 54px 에서 44px 로 낮춥니다. */
+  .hero h1{font-size:clamp(30px,3vw,44px);max-width:16ch;margin-bottom:24px}
   .hero-actions{margin-top:32px}
   .hero-media{order:0;display:block}
   .portrait{width:100%;border-radius:20px}
