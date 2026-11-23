@@ -47,7 +47,9 @@ export function Career() {
               <ul>
                 {group.items.map((item) => (
                   <li key={item.text}>
-                    {item.text} <span className="meta">{item.meta}</span>
+                    {item.text}
+                    {/* 날짜·기관이 없는 항목도 있어 있을 때만 붙입니다 */}
+                    {"meta" in item ? <span className="meta">{item.meta}</span> : null}
                   </li>
                 ))}
               </ul>
